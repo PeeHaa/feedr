@@ -11,14 +11,15 @@
         color: white;
         font-size: 20px;
         font-weight: bold;
-        position: relative;
-        top: 2px;
+
+        span {
+            position: relative;
+            top: 2px;
+        }
 
         img {
             height: 32px;
             margin-left: 15px;
-            position: relative;
-            top: -2px;
         }
     }
 }

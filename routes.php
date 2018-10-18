@@ -8,6 +8,7 @@ use PeeHaa\AwesomeFeed\Presentation\Controller\Dashboard;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Design;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Error;
 use PeeHaa\AwesomeFeed\Presentation\Controller\LogIn;
+use PeeHaa\AwesomeFeed\Presentation\Controller\LogOut;
 use PeeHaa\AwesomeFeed\Router\Manager as RouteManager;
 
 /** @var Injector $auryn */
@@ -28,4 +29,5 @@ if (!$gateKeeper->isAuthorized()) {
 
 if ($gateKeeper->isAuthorized()) {
     $router->get('', '/', [Dashboard::class, 'render']);
+    $router->post('logout', '/logout', [LogOut::class, 'process']);
 }

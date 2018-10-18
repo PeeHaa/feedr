@@ -1,6 +1,12 @@
 <nav class="navbar navbar-expand-lg">
     <a class="navbar-brand" href="#"><?= $this->translate('site.title'); ?></a>
     <div class="navbar-nav ml-auto logout">
-        PeeHaa <img src="https://avatars0.githubusercontent.com/u/1330296?v=4" alt="avatar">
+        <form action="<?= $this->url('logout'); ?>" method="post">
+            <input type="hidden" name="csrfToken" value="<?= base64_encode($this->csrfToken->get()); ?>">
+            <button class="btn btn-outline-success">
+                <span><?= $this->escape($this->gateKeeper->getUser()->getUsername()); ?></span>
+                <img src="<?= $this->escape($this->gateKeeper->getUser()->getAvatarUrl()); ?>" alt="avatar">
+            </button>
+        </form>
     </div>
 </nav>
