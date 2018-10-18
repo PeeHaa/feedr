@@ -9,10 +9,10 @@ use CodeCollab\Http\Session\Session;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\Form\Authentication\GitHubLogIn;
-use PeeHaa\AwesomeFeed\Form\Authentication\NativeLogIn;
 use PeeHaa\AwesomeFeed\GitHub\Authorization;
 use PeeHaa\AwesomeFeed\Presentation\Template\Html;
 use PeeHaa\AwesomeFeed\Router\UrlBuilder;
+use PeeHaa\AwesomeFeed\Storage\Postgres\User as UserStorage;
 
 class LogIn
 {
@@ -23,10 +23,9 @@ class LogIn
         $this->response = $response;
     }
 
-    public function render(Html $template, NativeLogIn $nativeLogin, GitHubLogIn $gitHubLogIn): Response
+    public function render(Html $template, GitHubLogIn $gitHubLogIn): Response
     {
         $this->response->setContent($template->renderPage('/authentication/login.phtml', [
-            'nativeForm' => $nativeLogin,
             'gitHubForm' => $gitHubLogIn,
         ]));
 
@@ -35,7 +34,6 @@ class LogIn
 
     public function processGitHubLogIn(
         Html $template,
-        NativeLogIn $nativeLogin,
         GitHubLogIn $gitHubLogIn,
         Request $request,
         Authorization $authorization,
@@ -44,7 +42,7 @@ class LogIn
         $gitHubLogIn->bindRequest($request);
 
         if (!$gitHubLogIn->isValid()) {
-            return $this->render($template, $nativeLogin, $gitHubLogIn);
+            return $this->render($template, $gitHubLogIn);
         }
 
         $this->response->setStatusCode(StatusCode::SEE_OTHER);
@@ -60,7 +58,8 @@ class LogIn
         Authorization $authorization,
         UrlBuilder $urlBuilder,
         GateKeeper $gateKeeper,
-        Session $session
+        Session $session,
+        UserStorage $storage
     ): Response {
         if (!$authorization->isStateValid($request->get('state'))) {
             return $this->buildErrorResponse($urlBuilder);
@@ -74,14 +73,17 @@ class LogIn
 
         $userInformation = $authorization->getUserInformation($result['access_token']);
 
-        $user = new User($userInformation['id'], $userInformation['login']);
+        $user = new User($userInformation['id'], $userInformation['login'], $userInformation['avatar_url']);
 
         $gateKeeper->authorize($user);
 
         $session->set('user', [
-            'id'       => $user->getId(),
-            'username' => $user->getUsername(),
+            'id'        => $user->getId(),
+            'username'  => $user->getUsername(),
+            'avatarUrl' => $user->getAvatarUrl(),
         ]);
+
+        $storage->store($user);
 
         $this->response->setStatusCode(StatusCode::SEE_OTHER);
         $this->response->addHeader('Location', '/');

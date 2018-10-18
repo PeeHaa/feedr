@@ -2,8 +2,8 @@
 .idea
 config/*
 !config/config.sample.php
-public/*
-!public/index.php
+public/css
+public/js
 node_modules
 cache
 phinx.yml

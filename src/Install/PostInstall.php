@@ -8,6 +8,7 @@ use PeeHaa\AwesomeFeed\Install\Task\CompileAssets;
 use PeeHaa\AwesomeFeed\Install\Task\GenerateConfig;
 use PeeHaa\AwesomeFeed\Install\Task\GenerateDatabaseConfig;
 use PeeHaa\AwesomeFeed\Install\Task\GenerateEncryptionKey;
+use PeeHaa\AwesomeFeed\Install\Task\MigrateDatabase;
 
 class PostInstall
 {
@@ -23,6 +24,7 @@ class PostInstall
             __DIR__ . '/../../phinx.yml',
             $event->getIO()
         ));
+        $installer->addTask(new MigrateDatabase(__DIR__ . '/../../'));
 
         $installer->run();
     }

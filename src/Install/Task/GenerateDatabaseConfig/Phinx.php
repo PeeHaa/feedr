@@ -39,12 +39,12 @@ environments:
     default_migration_table: phinxlog
     default_database: development
     production:
-        adapter: postgres
+        adapter: pgsql
         host: {host}
         name: {name}
         user: {username}
         pass: '{password}'
-        port: 3306
+        port: 5432
         charset: utf8
 
     development:

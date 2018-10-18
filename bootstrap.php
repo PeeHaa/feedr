@@ -63,7 +63,7 @@ $whoops->register();
 /**
  * Set up the environment
  */
-$configuration = require_once __DIR__ . '/config/configx.php';
+$configuration = require_once __DIR__ . '/config/config.php';
 
 /**
  * Set up encryption
@@ -120,6 +120,22 @@ $auryn->alias(Generator::class, RandomBytes32::class);
 $auryn->alias(Storage::class, TokenSession::class);
 
 /**
+ * Set up the database connection
+ */
+$auryn->share(\PDO::class);
+$auryn->delegate(\PDO::class, function() use ($configuration) {
+    $dbConnection = new \PDO(
+        sprintf('pgsql:dbname=%s;host=%s', $configuration['database']['name'], $configuration['database']['host']),
+        $configuration['database']['username'],
+        $configuration['database']['password']
+    );
+
+    $dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+    return $dbConnection;
+});
+
+/**
  * Set up the gate keeper
  */
 $auryn->share(GateKeeper::class);
@@ -127,7 +143,11 @@ $auryn->delegate(GateKeeper::class, function() use ($session) {
     $gateKeeper = new GateKeeper();
 
     if ($session->exists('user')) {
-        $gateKeeper->authorize(new User($session->get('user')['id'], $session->get('user')['username']));
+        $gateKeeper->authorize(new User(
+            $session->get('user')['id'],
+            $session->get('user')['username'],
+            $session->get('user')['avatarUrl']
+        ));
     }
 
     return $gateKeeper;

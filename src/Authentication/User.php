@@ -8,10 +8,13 @@ class User
 
     private $username;
 
-    public function __construct(int $id, string $username)
+    private $avatarUrl;
+
+    public function __construct(int $id, string $username, string $avatarUrl)
     {
-        $this->id       = $id;
-        $this->username = $username;
+        $this->id        = $id;
+        $this->username  = $username;
+        $this->avatarUrl = $avatarUrl;
     }
 
     public function getId(): int
@@ -22,5 +25,10 @@ class User
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    public function getAvatarUrl(): string
+    {
+        return $this->avatarUrl;
     }
 }

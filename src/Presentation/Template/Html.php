@@ -4,6 +4,7 @@ namespace PeeHaa\AwesomeFeed\Presentation\Template;
 
 use CodeCollab\I18n\Translator;
 use CodeCollab\CsrfToken\Token;
+use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Router\UrlBuilder;
 
 class Html
@@ -18,15 +19,25 @@ class Html
 
     private $urlBuilder;
 
+    private $gateKeeper;
+
     private $_variables;
 
-    public function __construct(string $basePage, string $templatePath, Translator $translator, Token $csrfToken, UrlBuilder $urlBuilder)
+    public function __construct(
+        string $basePage,
+        string $templatePath,
+        Translator $translator,
+        Token $csrfToken,
+        UrlBuilder $urlBuilder,
+        GateKeeper $gateKeeper
+    )
     {
         $this->basePage     = $basePage;
         $this->templatePath = $templatePath;
         $this->translator   = $translator;
         $this->csrfToken    = $csrfToken;
         $this->urlBuilder   = $urlBuilder;
+        $this->gateKeeper   = $gateKeeper;
     }
 
     public function render(string $template, array $data = []): string
