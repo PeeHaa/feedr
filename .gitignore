@@ -1,0 +1,8 @@
+/vendor/
+.idea
+config/*
+!config/config.sample.php
+public/*
+!public/index.php
+node_modules
+cache

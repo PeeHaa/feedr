@@ -1,0 +1,19 @@
+$theme-colors: (
+        "primary": #5281B1,
+        "secondary": #8E8C84,
+        "success": #93C54B,
+        "info": #609fb9,
+        "warning": #F47C3C,
+        "danger": #d9534f
+);
+
+$input-btn-focus-box-shadow: none;
+
+@import '~bootstrap/scss/bootstrap';
+
+@import 'reset';
+@import 'main';
+
+@import 'components/form';
+@import 'components/hr-text';
+@import 'components/panel';

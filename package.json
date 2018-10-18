@@ -1,0 +1,41 @@
+{
+  "name": "feedr",
+  "description": "Converts any resource into an RSS feed",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode=development --watch",
+    "prod": "webpack --mode=production",
+    "build": "webpack --mode=development --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "feedr"
+  ],
+  "author": "Pieter Hordijk",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^9.2.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "bootstrap": "^4.1.3",
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
+    "fscreen": "^1.0.2",
+    "jquery": "^3.3.1",
+    "mini-css-extract-plugin": "^0.4.4",
+    "node-sass": "^4.9.4",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "popper.js": "^1.14.4",
+    "postcss-loader": "^3.0.0",
+    "precss": "^3.1.2",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.20.2",
+    "webpack-build-notifier": "^0.1.30",
+    "webpack-cli": "^3.1.2"
+  },
+  "devDependencies": {}
+}

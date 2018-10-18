@@ -1,0 +1,50 @@
+{
+    "name": "peehaa/awesome-feed",
+    "description": "Converts any resource into an RSS feed",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pieter Hordijk",
+            "email": "info@pieterhordijk.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.2",
+        "amphp/artax": "^3.0",
+        "codecollab/form": "^1.0",
+        "codecollab/http": "^1.3",
+        "codecollab/i18n": "^1.0.1",
+        "filp/whoops": "^2.2",
+        "nikic/fast-route": "^1.3",
+        "rdlowrey/auryn": "^1.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "PeeHaa\\AwesomeFeed\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PeeHaa\\AwesomeFeedTest\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php bin/install.php"
+        ],
+        "post-update-cmd": [
+            "php bin/install.php"
+        ]
+    },
+    "bin": [
+        "bin/install.php"
+    ],
+    "config": {
+        "sort-packages": true
+    }
+}

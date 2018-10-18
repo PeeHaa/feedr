@@ -1,0 +1,21 @@
+.panel {
+    border: 1px solid #dddddd;
+
+    .panel-title {
+        padding: 15px;
+        background: #f5f5f5;
+        border-bottom: 1px solid #dddddd;
+
+        h5 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .panel-body {
+        padding: 15px;
+        background: #ffffff;
+    }
+}

@@ -1,0 +1,11 @@
+.form-group {
+    &.error {
+        .form-control {
+            border: 1px solid theme-color('danger');
+        }
+
+        .form-text {
+            color: theme-color('danger');
+        }
+    }
+}

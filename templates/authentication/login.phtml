@@ -1,0 +1,41 @@
+<?php declare(strict_types=1); ?>
+<?php /** @method string translate(string $key, array $data = []) */ ?>
+<?php /** @method string url(string $key, array $data = []) */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Authentication\NativeLogIn $nativeForm */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Authentication\GitHubLogIn $gitHubForm */ ?>
+<div class="container h-100">
+    <div class="row align-items-center h-100">
+        <div class="col-6 mx-auto">
+            <div class="panel">
+                <div class="panel-title">
+                    <h5><?= $this->translate('login.title'); ?></h5>
+                </div>
+                <div class="panel-body">
+                    <form action="" method="post" style="display: none;">
+                        <input type="hidden" name="csrfToken" value="<?= $nativeForm['csrfToken']->getValue(); ?>">
+                        <div class="form-group <?php if (!$nativeForm['username']->isValid()) echo 'has-error'; ?>">
+                            <label><?= $this->translate('login.form.native.email.label'); ?></label>
+                            <input type="email" class="form-control" placeholder="<?= $this->translate('login.form.native.email.placeholder'); ?>">
+                            <?php if (!$nativeForm['username']->isValid()) { ?>
+                                <small class="form-text"><?= $this->translate('form.error.' . $nativeForm['username']->getErrorType()); ?></small>
+                            <?php } ?>
+                        </div>
+                        <div class="form-group <?php if (!$nativeForm['password']->isValid()) echo 'has-error'; ?>">
+                            <label><?= $this->translate('login.form.native.password.label'); ?></label>
+                            <input type="email" class="form-control" placeholder="<?= $this->translate('login.form.native.password.placeholder'); ?>">
+                            <?php if (!$nativeForm['username']->isValid()) { ?>
+                                <small class="form-text"><?= $this->translate('form.error.' . $nativeForm['password']->getErrorType()); ?></small>
+                            <?php } ?>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><?= $this->translate('login.form.native.submit'); ?></button>
+                        <hr class="hr-text" data-content="Or">
+                    </form>
+                    <form action="<?= $this->url('processGitHubLogin'); ?>" method="post">
+                        <input type="hidden" name="csrfToken" value="<?= $gitHubForm['csrfToken']->getValue(); ?>">
+                        <button type="submit" class="btn btn-primary btn-block"><?= $this->translate('login.form.github.submit'); ?></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
