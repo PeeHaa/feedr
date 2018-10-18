@@ -6,3 +6,4 @@ public/*
 !public/index.php
 node_modules
 cache
+phinx.yml
