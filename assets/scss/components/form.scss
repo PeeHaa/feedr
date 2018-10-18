@@ -1,5 +1,7 @@
+@import './form/checkbox';
+
 .form-group {
-    &.error {
+    &.has-error {
         .form-control {
             border: 1px solid theme-color('danger');
         }

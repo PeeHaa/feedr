@@ -1,0 +1,19 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Feed\Create $createForm */ ?>
+<div class="panel">
+    <div class="panel-title">
+        <h5><?= $this->translate('feed.create.form.title'); ?></h5>
+    </div>
+    <div class="panel-body">
+        <form action="<?= $this->url('createFeed'); ?>" method="post">
+            <input type="hidden" name="csrfToken" value="<?= $createForm['csrfToken']->getValue(); ?>">
+            <div class="form-group <?php if (!$createForm['name']->isValid()) echo 'has-error'; ?>">
+                <input type="text" name="name" class="form-control" placeholder="<?= $this->translate('feed.create.form.name.placeholder'); ?>">
+                <?php if (!$createForm['name']->isValid()) { ?>
+                    <small class="form-text"><?= $this->translate('form.error.' . $createForm['name']->getErrorType()); ?></small>
+                <?php } ?>
+            </div>
+            <button type="submit" class="btn btn-outline-success btn-block"><?= $this->translate('feed.create.form.submit'); ?></button>
+        </form>
+    </div>
+</div>

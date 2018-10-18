@@ -1,0 +1,60 @@
+@import '~bootstrap/scss/_functions';
+@import '~bootstrap/scss/variables';
+
+.checkbox, .radio {
+    position: relative;
+    margin-right: 10px;
+    font-weight: normal !important;
+    font-size: 14px !important;
+    color: $gray-700;
+
+    input[type="checkbox"], input[type="radio"] {
+        display: none;
+    }
+
+    .body {
+        border: 1px solid $gray-400;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        padding: 4px;
+        position: relative;
+        top: 3px;
+        margin-right: 5px;
+
+        .check {
+            width: 10px;
+            height: 10px;
+        }
+    }
+
+    &:hover, &:focus {
+        outline: none;
+
+        .check {
+            background: theme-color('success');
+        }
+    }
+
+    input[type="checkbox"]:checked + .body, input[type="radio"]:checked + .body {
+        .check {
+            background: theme-color('primary');
+        }
+    }
+
+    &:hover, &:focus {
+        input[type="checkbox"]:checked + .body, input[type="radio"]:checked + .body {
+            border-color: theme-color('primary');
+        }
+    }
+}
+
+.radio {
+    .body {
+        border-radius: 50% !important;
+
+        .check {
+            border-radius: 50% !important;
+        }
+    }
+}
