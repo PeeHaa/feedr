@@ -41,11 +41,6 @@ use Whoops\Run;
 require __DIR__ . '/vendor/autoload.php';
 
 /**
- * Set up the environment
- */
-$configuration = require_once __DIR__ . '/config/config.php';
-
-/**
  * Set up dependency injection
  */
 $auryn = new Injector();
@@ -64,6 +59,11 @@ if (php_sapi_name() === 'cli') {
 $whoops = new Run();
 $whoops->pushHandler(new PrettyPageHandler());
 $whoops->register();
+
+/**
+ * Set up the environment
+ */
+$configuration = require_once __DIR__ . '/config/configx.php';
 
 /**
  * Set up encryption
