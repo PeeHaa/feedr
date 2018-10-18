@@ -1,0 +1,20 @@
+.table {
+    &.feeds {
+        th, td {
+            vertical-align: middle;
+        }
+
+        .served {
+            text-align: right;
+        }
+
+        .clicks {
+            text-align: right;
+        }
+
+        .actions {
+            width:100px;
+            text-align: right;
+        }
+    }
+}

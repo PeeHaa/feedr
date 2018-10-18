@@ -33,7 +33,7 @@ class Create
         $form->validate();
 
         if (!$form->isValid()) {
-            return (new Dashboard($this->response))->render($template, $form);
+            return (new Dashboard($this->response))->render($template, $form, $storage, $gateKeeper);
         }
 
         $feed = $storage->create($form, $gateKeeper->getUser());

@@ -4,6 +4,7 @@ namespace PeeHaa\AwesomeFeed\Storage\Postgres;
 
 use Cocur\Slugify\Slugify;
 use PeeHaa\AwesomeFeed\Authentication\User;
+use PeeHaa\AwesomeFeed\Feed\Collection;
 use PeeHaa\AwesomeFeed\Feed\Feed as Entity;
 use PeeHaa\AwesomeFeed\Form\Feed\Create;
 
@@ -82,5 +83,35 @@ class Feed
             $record['slug'],
             new User($record['user_id'], $record['username'], $record['avatar'])
         );
+    }
+
+    public function getUserFeeds(User $user): Collection
+    {
+        $query = '
+            SELECT feeds.id AS feed_id, feeds.name AS feed_name, feeds.slug,
+              creator.id AS user_id, creator.username, creator.avatar
+            FROM feeds
+            JOIN users AS creator ON creator.id = feeds.created_by
+            JOIN feed_admins ON feed_admins.feed_id = feeds.id
+              AND feed_admins.user_id = :user_id
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute([
+            'user_id' => $user->getId(),
+        ]);
+
+        $collection = new Collection();
+
+        foreach ($stmt->fetchAll() as $record) {
+            $collection->add(new Entity(
+                $record['feed_id'],
+                $record['feed_name'],
+                $record['slug'],
+                new User($record['user_id'], $record['username'], $record['avatar'])
+            ));
+        }
+
+        return $collection;
     }
 }

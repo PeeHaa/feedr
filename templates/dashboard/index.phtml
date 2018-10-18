@@ -1,34 +1,7 @@
 <div class="container-fluid" style="padding-top: 15px;" xmlns="http://www.w3.org/1999/html">
     <div class="row">
         <div class="col-sm-9">
-            <div class="panel">
-                <div class="panel-title">
-                    <h5>Your feeds</h5>
-                </div>
-                <div class="panel-body">
-                    <table class="table">
-                        <tr>
-                            <th>Name</th>
-                            <th>Created by</th>
-                            <th>URL</th>
-                            <th>Served</th>
-                            <th>Clicks</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                        <tr>
-                            <td>Room 11 Regulars</td>
-                            <td><a href="" target="_blank">PeeHaa</a></td>
-                            <td><a href="https://feedr.pieterhordijk.com/12/room-11-regulars" target="_blank">https://feedr.pieterhordijk.com/12/room-11-regulars</a></td>
-                            <td>12000</td>
-                            <td>1231546515</td>
-                            <td>
-                                <button class="btn btn-primary">E</button>
-                                <button class="btn btn-danger">D</button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            <?= $this->render('/dashboard/overview.phtml'); ?>
         </div>
         <div class="col-sm-3">
             <?= $this->render('/dashboard/form.phtml'); ?>

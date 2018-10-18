@@ -13,6 +13,14 @@ $texts = [
     'login.form.native.submit'                  => 'Log In',
     'login.form.github.submit'                  => 'Sign in with GitHub',
 
+    'feed.overview.title'                       => 'Your feeds',
+    'feed.overview.table.name'                  => 'Name',
+    'feed.overview.table.createdBy'             => 'Created by',
+    'feed.overview.table.url'                   => 'URL',
+    'feed.overview.table.served'                => 'Served',
+    'feed.overview.table.clicks'                => 'Clicks',
+    'feed.overview.table.noResults'             => 'You didn\'t create a feed yet.',
+
     'feed.create.form.title'                    => 'New feed',
     'feed.create.form.name.placeholder'         => 'Enter name',
     'feed.create.form.submit'                   => 'Create new feed',

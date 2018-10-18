@@ -1,0 +1,38 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Feed\Collection $overview */ ?>
+<div class="panel">
+    <div class="panel-title">
+        <h5><?= $this->translate('feed.overview.title'); ?></h5>
+    </div>
+    <div class="panel-body">
+        <table class="table feeds">
+            <tr>
+                <th><?= $this->translate('feed.overview.table.name'); ?></th>
+                <th><?= $this->translate('feed.overview.table.createdBy'); ?></th>
+                <th><?= $this->translate('feed.overview.table.url'); ?></th>
+                <th class="served"><?= $this->translate('feed.overview.table.served'); ?></th>
+                <th class="clicks"><?= $this->translate('feed.overview.table.clicks'); ?></th>
+                <th class="actions">&nbsp;</th>
+            </tr>
+            <?php if (!count($overview)) { ?>
+                <tr>
+                    <td colspan="6"><?= $this->translate('feed.overview.table.noResults'); ?></td>
+                </tr>
+            <?php } else { ?>
+                <?php foreach ($overview as $feed) { ?>
+                    <tr>
+                        <td><?= $this->escape($feed->getName()); ?></td>
+                        <td><a href="" target="_blank"><?= $this->escape($feed->getCreatedBy()->getUsername()); ?></a></td>
+                        <td><a href="<?= $this->escape($feed->getSlug()); ?>" target="_blank"><?= $this->escape($feed->getSlug()); ?></a></td>
+                        <td class="served">12000</td>
+                        <td class="clicks">1231546515</td>
+                        <td>
+                            <button class="btn btn-primary">E</button>
+                            <button class="btn btn-danger">D</button>
+                        </td class="actions">
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        </table>
+    </div>
+</div>
