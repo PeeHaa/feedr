@@ -1,10 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace PeeHaa\AwesomeFeed\Presentation\Controller;
+namespace PeeHaa\AwesomeFeed\Presentation\Controller\Authorization;
 
 use CodeCollab\Http\Request\Request;
 use CodeCollab\Http\Response\Response;
-
 use CodeCollab\Http\Response\StatusCode;
 use CodeCollab\Http\Session\Session;
 use PeeHaa\AwesomeFeed\Form\Authentication\LogOut as LogOutForm;

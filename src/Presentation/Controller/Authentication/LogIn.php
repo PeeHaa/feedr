@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PeeHaa\AwesomeFeed\Presentation\Controller;
+namespace PeeHaa\AwesomeFeed\Presentation\Controller\Authorization;
 
 use CodeCollab\Http\Request\Request;
 use CodeCollab\Http\Response\Response;
@@ -8,7 +8,7 @@ use CodeCollab\Http\Response\StatusCode;
 use CodeCollab\Http\Session\Session;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Authentication\User;
-use PeeHaa\AwesomeFeed\Form\Authentication\GitHubLogIn;
+use PeeHaa\AwesomeFeed\Form\Authentication\Login as Form;
 use PeeHaa\AwesomeFeed\GitHub\Authorization;
 use PeeHaa\AwesomeFeed\Presentation\Template\Html;
 use PeeHaa\AwesomeFeed\Router\UrlBuilder;
@@ -23,10 +23,10 @@ class LogIn
         $this->response = $response;
     }
 
-    public function render(Html $template, GitHubLogIn $gitHubLogIn): Response
+    public function render(Html $template, Form $form): Response
     {
         $this->response->setContent($template->renderPage('/authentication/login.phtml', [
-            'gitHubForm' => $gitHubLogIn,
+            'loginForm' => $form,
         ]));
 
         return $this->response;
@@ -34,15 +34,15 @@ class LogIn
 
     public function processGitHubLogIn(
         Html $template,
-        GitHubLogIn $gitHubLogIn,
+        Form $form,
         Request $request,
         Authorization $authorization,
         UrlBuilder $urlBuilder
     ): Response {
-        $gitHubLogIn->bindRequest($request);
+        $form->bindRequest($request);
 
-        if (!$gitHubLogIn->isValid()) {
-            return $this->render($template, $gitHubLogIn);
+        if (!$form->isValid()) {
+            return $this->render($template, $form);
         }
 
         $this->response->setStatusCode(StatusCode::SEE_OTHER);

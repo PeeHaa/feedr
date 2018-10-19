@@ -7,7 +7,7 @@ use CodeCollab\Form\Field\Csrf as CsrfField;
 use CodeCollab\Form\Validation\Match as MatchValidator;
 use CodeCollab\Form\Validation\Required as RequiredValidator;
 
-class GitHubLogIn extends BaseForm
+class Login extends BaseForm
 {
     protected function setupFields()
     {

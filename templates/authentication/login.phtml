@@ -1,7 +1,5 @@
 <?php declare(strict_types=1); ?>
-<?php /** @method string translate(string $key, array $data = []) */ ?>
-<?php /** @method string url(string $key, array $data = []) */ ?>
-<?php /** @var \PeeHaa\AwesomeFeed\Form\Authentication\GitHubLogIn $gitHubForm */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Authentication\Login $loginForm */ ?>
 <div class="container h-100">
     <div class="row align-items-center h-100">
         <div class="col-6 mx-auto">
@@ -11,7 +9,7 @@
                 </div>
                 <div class="panel-body">
                     <form action="<?= $this->url('processGitHubLogin'); ?>" method="post">
-                        <input type="hidden" name="csrfToken" value="<?= $gitHubForm['csrfToken']->getValue(); ?>">
+                        <input type="hidden" name="csrfToken" value="<?= $loginForm['csrfToken']->getValue(); ?>">
                         <button type="submit" class="btn btn-primary btn-block"><?= $this->translate('login.form.github.submit'); ?></button>
                     </form>
                 </div>
