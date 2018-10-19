@@ -147,6 +147,7 @@ $auryn->delegate(GateKeeper::class, function() use ($session) {
         $gateKeeper->authorize(new User(
             $session->get('user')['id'],
             $session->get('user')['username'],
+            $session->get('user')['url'],
             $session->get('user')['avatarUrl']
         ));
     }

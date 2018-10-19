@@ -24,4 +24,9 @@ $texts = [
     'feed.create.form.title'                    => 'New feed',
     'feed.create.form.name.placeholder'         => 'Enter name',
     'feed.create.form.submit'                   => 'Create new feed',
+
+    'feed.edit.repositories.title'              => 'Repositories the feed is watching',
+    'feed.edit.administrators.title'            => 'Administrators of this feed',
+    'feed.edit.administrators.table.noResults'  => 'There are no administrators for this feed',
+    'feed.edit.contents.title'                  => 'Content of the feed',
 ];

@@ -11,6 +11,7 @@ class CreateUsersTable extends AbstractMigration
         $table
             ->addColumn('id', 'biginteger')
             ->addColumn('username', 'string', ['limit' => 255])
+            ->addColumn('url', 'string', ['limit' => 255])
             ->addColumn('avatar', 'string', ['limit' => 255])
             ->addIndex(['username'], [
                 'unique' => true,

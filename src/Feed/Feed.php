@@ -2,6 +2,7 @@
 
 namespace PeeHaa\AwesomeFeed\Feed;
 
+use PeeHaa\AwesomeFeed\Authentication\Collection;
 use PeeHaa\AwesomeFeed\Authentication\User;
 
 class Feed
@@ -14,12 +15,15 @@ class Feed
 
     private $createdBy;
 
-    public function __construct(int $id, string $name, string $slug, User $user)
+    private $administrators;
+
+    public function __construct(int $id, string $name, string $slug, User $user, Collection $administrators)
     {
-        $this->id        = $id;
-        $this->name      = $name;
-        $this->slug      = $slug;
-        $this->createdBy = $user;
+        $this->id             = $id;
+        $this->name           = $name;
+        $this->slug           = $slug;
+        $this->createdBy      = $user;
+        $this->administrators = $administrators;
     }
 
     public function getId(): int
@@ -40,5 +44,10 @@ class Feed
     public function getCreatedBy(): User
     {
         return $this->createdBy;
+    }
+
+    public function getAdministrators(): Collection
+    {
+        return $this->administrators;
     }
 }

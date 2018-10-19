@@ -36,7 +36,9 @@ class Edit
             return $this->response;
         }
 
-        $this->response->setContent('FEED CREATED!');
+        $this->response->setContent($template->renderPage('/feed/edit.phtml', [
+            'feed' => $storage->getById((int) $id),
+        ]));
 
         return $this->response;
     }

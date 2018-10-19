@@ -23,14 +23,14 @@ $router->get('renderMethodNotAllowed', '/method-not-allowed', [Error::class, 'me
 $router->get('renderDesign', '/design', [Design::class, 'render']);
 
 if (!$gateKeeper->isAuthorized()) {
-    $router->get('', '/', [LogIn::class, 'render']);
+    $router->get('home', '/', [LogIn::class, 'render']);
     $router->get('renderLogin', '/login', [LogIn::class, 'render']);
     $router->post('processGitHubLogin', '/github/login', [LogIn::class, 'processGitHubLogIn']);
     $router->get('processGitHubRedirectUri', '/github/login', [LogIn::class, 'processGitHubLogInRedirectUri']);
 }
 
 if ($gateKeeper->isAuthorized()) {
-    $router->get('', '/', [Dashboard::class, 'render']);
+    $router->get('home', '/', [Dashboard::class, 'render']);
     $router->post('createFeed', '/feeds/create', [Create::class, 'process']);
     $router->get('editFeed', '/feeds/{id:\d+}/{slug:.+}/edit', [Edit::class, 'render']);
     $router->post('logout', '/logout', [LogOut::class, 'process']);

@@ -44,15 +44,16 @@ class User
     {
         $query = '
             INSERT INTO users
-            (id, username, avatar)
+              (id, username, url, avatar)
             VALUES
-            (:id, :username, :avatar)
+              (:id, :username, :url, :avatar)
         ';
 
         $stmt = $this->dbConnection->prepare($query);
         $stmt->execute([
             'id'       => $user->getId(),
             'username' => $user->getUsername(),
+            'url'      => $user->getUrl(),
             'avatar'   => $user->getAvatarUrl(),
         ]);
     }
@@ -61,7 +62,9 @@ class User
     {
         $query = '
             UPDATE users
-            SET username = :username, avatar = :avatar
+            SET username = :username,
+              url = :url,
+              avatar = :avatar
             WHERE id = :id
         ';
 
@@ -69,6 +72,7 @@ class User
         $stmt->execute([
             'id'       => $user->getId(),
             'username' => $user->getUsername(),
+            'url'      => $user->getUrl(),
             'avatar'   => $user->getAvatarUrl(),
         ]);
     }

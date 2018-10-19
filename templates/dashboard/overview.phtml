@@ -22,12 +22,16 @@
                 <?php foreach ($overview as $feed) { ?>
                     <tr>
                         <td><?= $this->escape($feed->getName()); ?></td>
-                        <td><a href="" target="_blank"><?= $this->escape($feed->getCreatedBy()->getUsername()); ?></a></td>
+                        <td>
+                            <a href="<?= $this->escape($feed->getCreatedBy()->getUrl()); ?>" target="_blank">
+                                <?= $this->escape($feed->getCreatedBy()->getUsername()); ?>
+                            </a>
+                        </td>
                         <td><a href="<?= $this->escape($feed->getSlug()); ?>" target="_blank"><?= $this->escape($feed->getSlug()); ?></a></td>
                         <td class="served">12000</td>
                         <td class="clicks">1231546515</td>
                         <td>
-                            <button class="btn btn-primary">E</button>
+                            <a href="<?= $this->escape($this->url('editFeed', ['id' => $feed->getId(), 'slug' => $feed->getSlug()])); ?>" class="btn btn-primary">E</a>
                             <button class="btn btn-danger">D</button>
                         </td class="actions">
                     </tr>

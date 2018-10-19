@@ -3,6 +3,7 @@
 namespace PeeHaa\AwesomeFeed\Storage\Postgres;
 
 use Cocur\Slugify\Slugify;
+use PeeHaa\AwesomeFeed\Authentication\Collection as UserCollection;
 use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\Feed\Collection;
 use PeeHaa\AwesomeFeed\Feed\Feed as Entity;
@@ -21,9 +22,9 @@ class Feed
     {
         $query = '
             INSERT INTO feeds
-            (name, created_by, slug)
+              (name, created_by, slug)
             VALUES 
-            (:name, :created_by, :slug)
+              (:name, :created_by, :slug)
         ';
 
         $stmt = $this->dbConnection->prepare($query);
@@ -44,9 +45,9 @@ class Feed
     {
         $query = '
             INSERT INTO feed_admins
-            (feed_id, user_id)
+              (feed_id, user_id)
             VALUES 
-            (:feed_id, :user_id)
+              (:feed_id, :user_id)
         ';
 
         $stmt = $this->dbConnection->prepare($query);
@@ -60,10 +61,16 @@ class Feed
     {
         $query = '
             SELECT feeds.id AS feed_id, feeds.name AS feed_name, feeds.slug,
-              creator.id AS user_id, creator.username, creator.avatar
+              creator.id AS user_id, creator.username, creator.url, creator.avatar,
+              administrators.id AS administrator_id, administrators.username AS administrator_username,
+              administrators.url AS administrator_url, administrators.avatar AS administrator_avatar
             FROM feeds
-            JOIN users AS creator ON creator.id = feeds.created_by
+              JOIN users AS creator ON creator.id = feeds.created_by
+              JOIN feed_admins ON feed_admins.feed_id = feeds.id
+              JOIN users AS administrators ON administrators.id = feed_admins.user_id
             WHERE feeds.id = :id
+            ORDER BY feeds.name ASC,
+              administrators.username ASC
         ';
 
         $stmt = $this->dbConnection->prepare($query);
@@ -71,17 +78,19 @@ class Feed
             'id' => $id,
         ]);
 
-        $record = $stmt->fetch();
+        $recordset      = $stmt->fetchAll();
+        $administrators = $this->getAdministratorsByFeedFeedsRecordset($recordset);
 
-        if (!$record) {
+        if (!$recordset) {
             return null;
         }
 
         return new Entity(
-            $record['feed_id'],
-            $record['feed_name'],
-            $record['slug'],
-            new User($record['user_id'], $record['username'], $record['avatar'])
+            $recordset[0]['feed_id'],
+            $recordset[0]['feed_name'],
+            $recordset[0]['slug'],
+            new User($recordset[0]['user_id'], $recordset[0]['username'], $recordset[0]['url'], $recordset[0]['avatar']),
+            $administrators[$recordset[0]['feed_id']]
         );
     }
 
@@ -89,11 +98,18 @@ class Feed
     {
         $query = '
             SELECT feeds.id AS feed_id, feeds.name AS feed_name, feeds.slug,
-              creator.id AS user_id, creator.username, creator.avatar
+              creator.id AS creator_id, creator.username AS creator_username, creator.url AS creator_url,
+              creator.avatar AS creator_avatar,
+              administrators.id AS administrator_id, administrators.username AS administrator_username,
+              administrators.url AS administrator_url, administrators.avatar AS administrator_avatar
             FROM feeds
-            JOIN users AS creator ON creator.id = feeds.created_by
-            JOIN feed_admins ON feed_admins.feed_id = feeds.id
-              AND feed_admins.user_id = :user_id
+              JOIN users AS creator ON creator.id = feeds.created_by
+              JOIN feed_admins ON feed_admins.feed_id = feeds.id
+              JOIN users AS administrators ON administrators.id = feed_admins.user_id
+              JOIN feed_admins ON feed_admins.feed_id = feeds.id
+                AND feed_admins.user_id = :user_id
+            ORDER BY feeds.name ASC,
+              administrators.username ASC
         ';
 
         $stmt = $this->dbConnection->prepare($query);
@@ -102,16 +118,43 @@ class Feed
         ]);
 
         $collection = new Collection();
+        $recordset  = $stmt->fetchAll();
+        $administrators = $this->getAdministratorsByFeedFeedsRecordset($recordset);
 
         foreach ($stmt->fetchAll() as $record) {
             $collection->add(new Entity(
                 $record['feed_id'],
                 $record['feed_name'],
                 $record['slug'],
-                new User($record['user_id'], $record['username'], $record['avatar'])
+                new User($record['user_id'], $record['username'], $record['url'], $record['avatar']),
+                $administrators[$record['feed_id']]
             ));
         }
 
         return $collection;
+    }
+
+    /**
+     * @return UserCollection[]
+     */
+    private function getAdministratorsByFeedFeedsRecordset(array $feedRecordset): array
+    {
+        $currentFeedId  = null;
+        $administrators = [];
+
+        foreach ($feedRecordset as $feedRecord) {
+            if ($feedRecord['feed_id'] !== $currentFeedId) {
+                $administrators[$feedRecord['feed_id']] = new UserCollection();
+            }
+
+            $administrators[$feedRecord['feed_id']]->add(new User(
+                $feedRecord['administrator_id'],
+                $feedRecord['administrator_username'],
+                $feedRecord['administrator_url'],
+                $feedRecord['administrator_avatar']
+            ));
+        }
+
+        return $administrators;
     }
 }

@@ -1,0 +1,74 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Feed\Feed $feed */ ?>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel">
+                        <div class="panel-title">
+                            <h5><?= $this->translate('feed.edit.repositories.title'); ?></h5>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table repositories">
+                                <tr>
+                                    <td>PeeHaa/Feedr</td>
+                                    <td class="actions"><button class="btn btn-danger">D</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel">
+                        <div class="panel-title">
+                            <h5><?= $this->translate('feed.edit.administrators.title'); ?></h5>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table administrators">
+                                <?php if (!count($feed->getAdministrators())) { ?>
+                                    <tr>
+                                        <td colspan="3">
+                                            <?= $this->translate('feed.edit.administrators.table.noResults'); ?>
+                                        </td>
+                                    </tr>
+                                <?php } else { ?>
+                                    <?php foreach ($feed->getAdministrators() as $administrator) { ?>
+                                        <tr>
+                                            <td class="avatar"><img src="<?= $this->escape($administrator->getAvatarUrl()); ?>" alt="avatar"></td>
+                                            <td><?= $this->escape($administrator->getUsername()); ?></td>
+                                            <td class="actions"><button class="btn btn-danger">D</button></td>
+                                        </tr>
+                                    <?php } ?>
+                                <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="panel">
+                <div class="panel-title">
+                    <h5><?= $this->translate('feed.edit.contents.title'); ?></h5>
+                </div>
+                <div class="panel-body preview">
+                    <div class="media">
+                        <img src="https://avatars0.githubusercontent.com/u/1330296?v=4" alt="avatar" class="mr3">
+                        <div class="media-body">
+                            <h5 class="mt-0"><a href="https://github.com/PeeHaa/feedr" target="_blank">Peehaa/feedr</a></h5>
+                            <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <img src="https://avatars0.githubusercontent.com/u/1330296?v=4" alt="avatar" class="mr3">
+                        <div class="media-body">
+                            <h5 class="mt-0"><a href="https://github.com/PeeHaa/feedr" target="_blank">Peehaa/feedr</a></h5>
+                            <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

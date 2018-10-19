@@ -10,7 +10,9 @@ class CreateFeedsTable extends AbstractMigration
 
         $table
             ->addColumn('name', 'string', ['limit' => 255])
+            ->addColumn('slug', 'string', ['limit' => 250])
             ->addColumn('created_by', 'biginteger')
+            ->addIndex('slug')
             ->addForeignKeyWithName('fk_feeds_users', 'created_by', 'users', 'id', [
                 'delete' => 'RESTRICT',
             ])

@@ -73,13 +73,19 @@ class LogIn
 
         $userInformation = $authorization->getUserInformation($result['access_token']);
 
-        $user = new User($userInformation['id'], $userInformation['login'], $userInformation['avatar_url']);
+        $user = new User(
+            $userInformation['id'],
+            $userInformation['login'],
+            $userInformation['html_url'],
+            $userInformation['avatar_url']
+        );
 
         $gateKeeper->authorize($user);
 
         $session->set('user', [
             'id'        => $user->getId(),
             'username'  => $user->getUsername(),
+            'url'       => $user->getUrl(),
             'avatarUrl' => $user->getAvatarUrl(),
         ]);
 
@@ -94,7 +100,7 @@ class LogIn
     private function buildErrorResponse(UrlBuilder $urlBuilder): Response
     {
         $this->response->setStatusCode(StatusCode::FORBIDDEN);
-        $this->response->addHeader('Location', $urlBuilder->build(''));
+        $this->response->addHeader('Location', $urlBuilder->build('home'));
 
         return $this->response;
     }
