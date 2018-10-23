@@ -50,4 +50,9 @@ class Feed
     {
         return $this->administrators;
     }
+
+    public function hasUserAccess(User $user): bool
+    {
+        return $this->administrators->contains($user);
+    }
 }

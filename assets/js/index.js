@@ -1,6 +1,8 @@
 import 'bootstrap';
 import './../scss/app.scss';
 
-import quantumCheckbox from './components/form/Checkbox/Plugin';
+import xhrSubmission from './components/form/XhrSubmission/Plugin';
+import modal from './components/Modal/Plugin';
 
-quantumCheckbox();
+xhrSubmission();
+modal();

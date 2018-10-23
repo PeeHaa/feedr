@@ -1,0 +1,99 @@
+<?php declare(strict_types=1);
+
+namespace PeeHaa\AwesomeFeed\Storage\GitHub;
+
+use Amp\Artax\Client;
+use Amp\Artax\Request;
+use Amp\Artax\Response;
+use PeeHaa\AwesomeFeed\Authentication\Collection;
+use PeeHaa\AwesomeFeed\Authentication\User as UserEntity;
+use PeeHaa\AwesomeFeed\GitHub\AccessToken;
+use PeeHaa\AwesomeFeed\GitHub\ApiRequestInformation;
+use function Amp\call;
+use function Amp\Promise\wait;
+
+class User
+{
+    private $accessToken;
+
+    private $httpClient;
+
+    public function __construct(AccessToken $accessToken, Client $httpClient)
+    {
+        $this->accessToken = $accessToken;
+        $this->httpClient  = $httpClient;
+    }
+
+    public function search(string $query): Collection
+    {
+        if (preg_match('~^https://github.com/([^/]+)~', $query, $matches) === 1) {
+            return $this->getUserByUsername($matches[1]);
+        }
+
+        return $this->getUsersBySearch($query);
+    }
+
+    private function getUserByUsername(string $username): Collection
+    {
+        return wait(call(function() use ($username) {
+            $request = (new Request(ApiRequestInformation::BASE_URL . '/users/' . rawurlencode($username)))
+                ->withHeader('Accept', ApiRequestInformation::VERSION_HEADER)
+                ->withHeader('Authorization', 'token ' . $this->accessToken->getToken())
+            ;
+
+            /** @var Response $response */
+            $response = yield $this->httpClient->request($request);
+            $body     = yield $response->getBody();
+
+            $collection = new Collection();
+
+            if ($response->getStatus() !== 200) {
+                return $collection;
+            }
+
+            $user = json_decode($body, true);
+
+            $collection->add(new UserEntity(
+                $user['id'],
+                $user['login'],
+                $user['html_url'],
+                $user['avatar_url']
+            ));
+
+            return $collection;
+        }));
+    }
+
+    private function getUsersBySearch(string $query): Collection
+    {
+        return wait(call(function() use ($query) {
+            $request = (new Request(ApiRequestInformation::BASE_URL . '/search/users?q=' . rawurlencode($query) . '+type:user'))
+                ->withHeader('Accept', ApiRequestInformation::VERSION_HEADER)
+                ->withHeader('Authorization', 'token ' . $this->accessToken->getToken())
+            ;
+
+            /** @var Response $response */
+            $response = yield $this->httpClient->request($request);
+            $body     = yield $response->getBody();
+
+            $collection = new Collection();
+
+            if ($response->getStatus() !== 200) {
+                return $collection;
+            }
+
+            $users = json_decode($body, true);
+
+            foreach ($users['items'] as $user) {
+                $collection->add(new UserEntity(
+                    $user['id'],
+                    $user['login'],
+                    $user['html_url'],
+                    $user['avatar_url']
+                ));
+            }
+
+            return $collection;
+        }));
+    }
+}

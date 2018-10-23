@@ -1,0 +1,44 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Authentication\Collection $users */ ?>
+<div class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?= $this->translate('feed.administrators.search.results.title'); ?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table add-administrator">
+                    <?php if (!count($users)) { ?>
+                        <tr>
+                            <td colspan="2"><?= $this->translate('feed.administrators.search.results.noResults'); ?></td>
+                        </tr>
+                    <?php } else { ?>
+                        <?php foreach ($users as $user) { ?>
+                            <tr>
+                                <td class="actions">
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="admin" value="<?= $user->getId(); ?>">
+                                        <div class="body">
+                                            <div class="check"></div>
+                                        </div>
+                                        <?= $this->escape($user->getUsername()); ?>
+                                    </label>
+                                </td>
+                                <td class="avatar">
+                                    <img src="<?= $this->escape($user->getAvatarUrl()); ?>">
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"><?= $this->translate('feed.administrators.search.results.submit'); ?></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $this->translate('feed.administrators.search.results.button.close'); ?></button>
+            </div>
+        </div>
+    </div>
+</div>

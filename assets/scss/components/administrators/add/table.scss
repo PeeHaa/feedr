@@ -1,0 +1,34 @@
+.modal {
+    .modal-body {
+        max-height: calc(100vh - 180px);
+        overflow-y: scroll;
+
+        table {
+            &.add-administrator {
+                td {
+                    vertical-align: middle;
+                    padding: 5px;
+                    border: 0;
+                }
+
+                .avatar {
+                    width: 30px;
+
+                    img {
+                        width: 30px;
+                    }
+                }
+
+                .actions {
+                    .checkbox {
+                        margin-right: 0;
+
+                        .body {
+                            top: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

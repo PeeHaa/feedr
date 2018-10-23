@@ -105,9 +105,8 @@ class Feed
             FROM feeds
               JOIN users AS creator ON creator.id = feeds.created_by
               JOIN feed_admins ON feed_admins.feed_id = feeds.id
-              JOIN users AS administrators ON administrators.id = feed_admins.user_id
-              JOIN feed_admins ON feed_admins.feed_id = feeds.id
                 AND feed_admins.user_id = :user_id
+              JOIN users AS administrators ON administrators.id = feed_admins.user_id
             ORDER BY feeds.name ASC,
               administrators.username ASC
         ';

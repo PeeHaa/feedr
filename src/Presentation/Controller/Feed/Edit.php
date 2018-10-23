@@ -4,6 +4,8 @@ namespace PeeHaa\AwesomeFeed\Presentation\Controller\Feed;
 
 use CodeCollab\Http\Response\Response;
 use CodeCollab\Http\Response\StatusCode;
+use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
+use PeeHaa\AwesomeFeed\Form\Administrator\Search;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Error;
 use PeeHaa\AwesomeFeed\Presentation\Template\Html;
 use PeeHaa\AwesomeFeed\Router\UrlBuilder;
@@ -18,11 +20,18 @@ class Edit
         $this->response = $response;
     }
 
-    public function render(Html $template, Feed $storage, UrlBuilder $urlBuilder, string $id, string $slug): Response
-    {
+    public function render(
+        Html $template,
+        Feed $storage,
+        UrlBuilder $urlBuilder,
+        GateKeeper $gateKeeper,
+        Search $searchForm,
+        string $id,
+        string $slug
+    ): Response {
         $feed = $storage->getById((int) $id);
 
-        if ($feed === null) {
+        if ($feed === null || !$feed->hasUserAccess($gateKeeper->getUser())) {
             return (new Error($this->response))->notFound();
         }
 
@@ -37,7 +46,8 @@ class Edit
         }
 
         $this->response->setContent($template->renderPage('/feed/edit.phtml', [
-            'feed' => $storage->getById((int) $id),
+            'feed'       => $storage->getById((int) $id),
+            'searchForm' => $searchForm,
         ]));
 
         return $this->response;

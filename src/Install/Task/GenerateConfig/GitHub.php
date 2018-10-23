@@ -31,6 +31,14 @@ class GitHub
             } while(!$configuration['gitHub']['clientSecret']);
         }
 
+        if (!array_key_exists('accessToken', $configuration['gitHub'])) {
+            do {
+                $configuration['gitHub']['accessToken'] = $cliPrompt->askAndHideAnswer(
+                    'What is your personal GitHub access token (https://github.com/settings/tokens): '
+                );
+            } while(!$configuration['gitHub']['accessToken']);
+        }
+
         $output->success('GitHub configuration generated');
 
         return $configuration;

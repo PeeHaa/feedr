@@ -1,8 +1,46 @@
 <?php declare(strict_types=1); ?>
 <?php /** @var \PeeHaa\AwesomeFeed\Feed\Feed $feed */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Administrator\Search $searchForm */ ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel">
+                        <div class="panel-title">
+                            <h5><?= $this->translate('feed.edit.repositories.add.title'); ?></h5>
+                        </div>
+                        <div class="panel-body">
+                            <form action="" method="post">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="search" placeholder="<?= $this->translate('feed.edit.repositories.add.form.search.placeholder'); ?>">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary" type="button"><?= $this->translate('feed.edit.repositories.add.form.search.submit'); ?></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel">
+                        <div class="panel-title">
+                            <h5><?= $this->translate('feed.edit.administrators.add.title'); ?></h5>
+                        </div>
+                        <div class="panel-body">
+                            <form action="<?= $this->url('searchUsers', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" method="post" class="xhr">
+                                <input type="hidden" name="csrfToken" value="<?= $searchForm['csrfToken']->getValue(); ?>">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="query" placeholder="<?= $this->translate('feed.edit.administrators.add.form.search.placeholder'); ?>">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary" type="submit"><?= $this->translate('feed.edit.administrators.add.form.search.submit'); ?></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-6">
                     <div class="panel">
@@ -37,7 +75,11 @@
                                         <tr>
                                             <td class="avatar"><img src="<?= $this->escape($administrator->getAvatarUrl()); ?>" alt="avatar"></td>
                                             <td><?= $this->escape($administrator->getUsername()); ?></td>
-                                            <td class="actions"><button class="btn btn-danger">D</button></td>
+                                            <td class="actions">
+                                                <?php if ($feed->getCreatedBy()->getId() !== $administrator->getId()) { ?>
+                                                    <button class="btn btn-danger">D</button>
+                                                <?php } ?>
+                                            </td>
                                         </tr>
                                     <?php } ?>
                                 <?php } ?>

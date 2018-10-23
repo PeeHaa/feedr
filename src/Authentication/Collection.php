@@ -4,11 +4,11 @@ namespace PeeHaa\AwesomeFeed\Authentication;
 
 class Collection implements \Iterator, \Countable
 {
-    private $users;
+    private $users = [];
 
     public function add(User $user): void
     {
-        $this->users[] = $user;
+        $this->users[$user->getId()] = $user;
     }
 
     public function current(): User
@@ -26,7 +26,6 @@ class Collection implements \Iterator, \Countable
         return key($this->users);
     }
 
-
     public function valid(): bool
     {
         return $this->key() !== null;
@@ -40,5 +39,23 @@ class Collection implements \Iterator, \Countable
     public function count()
     {
         return count($this->users);
+    }
+
+    public function contains(User $user): bool
+    {
+        return array_key_exists($user->getId(), $this->users);
+    }
+
+    public function filter(callable $callback): self
+    {
+        $collection = new Collection();
+
+        foreach ($this->users as $user) {
+            if ($callback($user) === true) {
+                $collection->add($user);
+            }
+        }
+
+        return $collection;
     }
 }

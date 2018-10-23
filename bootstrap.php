@@ -28,6 +28,7 @@ use FastRoute\Dispatcher\GroupCountBased as RouteDispatcher;
 use FastRoute\RouteParser\Std as StandardRouteParser;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Authentication\User;
+use PeeHaa\AwesomeFeed\GitHub\AccessToken;
 use PeeHaa\AwesomeFeed\GitHub\Credentials;
 use PeeHaa\AwesomeFeed\Presentation\Template\Html;
 use PeeHaa\AwesomeFeed\Router\FrontController;
@@ -208,6 +209,9 @@ $auryn->alias(Client::class, DefaultClient::class);
 $auryn->define(Credentials::class, [
     ':clientId'     => $configuration['gitHub']['clientId'],
     ':clientSecret' => $configuration['gitHub']['clientSecret'],
+]);
+$auryn->define(AccessToken::class, [
+    ':accessToken' => $configuration['gitHub']['accessToken'],
 ]);
 
 /**
