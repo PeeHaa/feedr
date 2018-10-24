@@ -5,6 +5,7 @@ namespace PeeHaa\AwesomeFeed\Storage\GitHub;
 use Amp\Artax\Client;
 use Amp\Artax\Request;
 use Amp\Artax\Response;
+use Amp\Promise;
 use PeeHaa\AwesomeFeed\Authentication\Collection;
 use PeeHaa\AwesomeFeed\Authentication\User as UserEntity;
 use PeeHaa\AwesomeFeed\GitHub\AccessToken;
@@ -27,15 +28,40 @@ class User
     public function search(string $query): Collection
     {
         if (preg_match('~^https://github.com/([^/]+)~', $query, $matches) === 1) {
-            return $this->getUserByUsername($matches[1]);
+            return $this->getUsersByUsernames($matches[1]);
         }
 
         return $this->getUsersBySearch($query);
     }
 
-    private function getUserByUsername(string $username): Collection
+    public function getUsersByUsernames(string ...$usernames): Collection
     {
-        return wait(call(function() use ($username) {
+        return wait(call(function() use ($usernames) {
+            $collection = new Collection();
+
+            $promises = [];
+
+            foreach ($usernames as $username) {
+                $promises[] = $this->getUserByUsername($username);
+            }
+
+            $users = yield $promises;
+
+            foreach ($users as $user) {
+                if ($user === null) {
+                    continue;
+                }
+
+                $collection->add($user);
+            }
+
+            return $collection;
+        }));
+    }
+
+    private function getUserByUsername(string $username): Promise
+    {
+        return call(function() use ($username) {
             $request = (new Request(ApiRequestInformation::BASE_URL . '/users/' . rawurlencode($username)))
                 ->withHeader('Accept', ApiRequestInformation::VERSION_HEADER)
                 ->withHeader('Authorization', 'token ' . $this->accessToken->getToken())
@@ -45,23 +71,19 @@ class User
             $response = yield $this->httpClient->request($request);
             $body     = yield $response->getBody();
 
-            $collection = new Collection();
-
             if ($response->getStatus() !== 200) {
-                return $collection;
+                return null;
             }
 
             $user = json_decode($body, true);
 
-            $collection->add(new UserEntity(
+            return new UserEntity(
                 $user['id'],
                 $user['login'],
                 $user['html_url'],
                 $user['avatar_url']
-            ));
-
-            return $collection;
-        }));
+            );
+        });
     }
 
     private function getUsersBySearch(string $query): Collection

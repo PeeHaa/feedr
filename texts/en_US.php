@@ -27,12 +27,10 @@ $texts = [
 
     'feed.edit.repositories.title'                          => 'Repositories the feed is watching',
     'feed.edit.repositories.add.title'                      => 'Add repository',
-    'feed.edit.repositories.add.form.search.placeholder'    => 'Keyword(s) or URL',
-    'feed.edit.repositories.add.form.search.submit'         => 'Search',
+    'feed.edit.repositories.add.form.search.placeholder'    => 'Keyword(s), repository name or URL',
     'feed.edit.administrators.title'                        => 'Administrators of this feed',
     'feed.edit.administrators.add.title'                    => 'Add administrator',
     'feed.edit.administrators.add.form.search.placeholder'  => 'GitHub username or profile URL',
-    'feed.edit.administrators.add.form.search.submit'       => 'Search',
     'feed.edit.administrators.table.noResults'              => 'There are no administrators for this feed',
     'feed.edit.contents.title'                              => 'Content of the feed',
 

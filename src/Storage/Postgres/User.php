@@ -2,6 +2,7 @@
 
 namespace PeeHaa\AwesomeFeed\Storage\Postgres;
 
+use PeeHaa\AwesomeFeed\Authentication\Collection;
 use PeeHaa\AwesomeFeed\Authentication\User as UserInfo;
 
 class User
@@ -22,6 +23,13 @@ class User
         }
 
         $this->update($user);
+    }
+
+    public function storeCollection(Collection $users): void
+    {
+        foreach ($users as $user) {
+            $this->store($user);
+        }
     }
 
     public function exists(UserInfo $user): bool

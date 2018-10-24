@@ -11,11 +11,11 @@
                             <h5><?= $this->translate('feed.edit.repositories.add.title'); ?></h5>
                         </div>
                         <div class="panel-body">
-                            <form action="" method="post">
+                            <form action="<?= $this->url('searchRepositories', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" method="post" class="searchRepositories">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" name="search" placeholder="<?= $this->translate('feed.edit.repositories.add.form.search.placeholder'); ?>">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-primary" type="button"><?= $this->translate('feed.edit.repositories.add.form.search.submit'); ?></button>
+                                        <button class="btn btn-outline-primary" type="submit"><i class="icon-search"></i></button>
                                     </div>
                                 </div>
                             </form>
@@ -28,12 +28,12 @@
                             <h5><?= $this->translate('feed.edit.administrators.add.title'); ?></h5>
                         </div>
                         <div class="panel-body">
-                            <form action="<?= $this->url('searchUsers', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" method="post" class="xhr">
+                            <form action="<?= $this->url('searchUsers', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" method="post" class="searchUsers">
                                 <input type="hidden" name="csrfToken" value="<?= $searchForm['csrfToken']->getValue(); ?>">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" name="query" placeholder="<?= $this->translate('feed.edit.administrators.add.form.search.placeholder'); ?>">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-primary" type="submit"><?= $this->translate('feed.edit.administrators.add.form.search.submit'); ?></button>
+                                        <button class="btn btn-outline-primary" type="submit"><i class="icon-search"></i></button>
                                     </div>
                                 </div>
                             </form>
@@ -64,25 +64,27 @@
                         </div>
                         <div class="panel-body">
                             <table class="table administrators">
-                                <?php if (!count($feed->getAdministrators())) { ?>
-                                    <tr>
-                                        <td colspan="3">
-                                            <?= $this->translate('feed.edit.administrators.table.noResults'); ?>
-                                        </td>
-                                    </tr>
-                                <?php } else { ?>
-                                    <?php foreach ($feed->getAdministrators() as $administrator) { ?>
+                                <tbody>
+                                    <?php if (!count($feed->getAdministrators())) { ?>
                                         <tr>
-                                            <td class="avatar"><img src="<?= $this->escape($administrator->getAvatarUrl()); ?>" alt="avatar"></td>
-                                            <td><?= $this->escape($administrator->getUsername()); ?></td>
-                                            <td class="actions">
-                                                <?php if ($feed->getCreatedBy()->getId() !== $administrator->getId()) { ?>
-                                                    <button class="btn btn-danger">D</button>
-                                                <?php } ?>
+                                            <td colspan="3">
+                                                <?= $this->translate('feed.edit.administrators.table.noResults'); ?>
                                             </td>
                                         </tr>
+                                    <?php } else { ?>
+                                        <?php foreach ($feed->getAdministrators() as $administrator) { ?>
+                                            <tr>
+                                                <td class="avatar"><img src="<?= $this->escape($administrator->getAvatarUrl()); ?>" alt="avatar"></td>
+                                                <td><?= $this->escape($administrator->getUsername()); ?></td>
+                                                <td class="actions">
+                                                    <?php if ($feed->getCreatedBy()->getId() !== $administrator->getId()) { ?>
+                                                        <button class="btn btn-danger">D</button>
+                                                    <?php } ?>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
                                     <?php } ?>
-                                <?php } ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>

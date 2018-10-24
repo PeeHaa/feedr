@@ -7,6 +7,7 @@ use CodeCollab\Http\Response\Response;
 use CodeCollab\Http\Response\StatusCode;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Authentication\User;
+use PeeHaa\AwesomeFeed\Form\Administrator\Create as CreateForm;
 use PeeHaa\AwesomeFeed\Form\Administrator\Search as Form;
 use PeeHaa\AwesomeFeed\Presentation\Template\Html;
 use PeeHaa\AwesomeFeed\Storage\GitHub\User as Storage;
@@ -26,6 +27,7 @@ class Search
         Feed $storage,
         Request $request,
         Form $form,
+        CreateForm $createForm,
         GateKeeper $gateKeeper,
         Storage $gitHubStorage,
         string $id,
@@ -71,7 +73,9 @@ class Search
         $this->response->setContent(json_encode([
             'content' => $template->render('/feed/administrator/search-result-modal.phtml', [
                 'searchForm' => $form,
+                'createForm' => $createForm,
                 'users'      => $users,
+                'feed'       => $feed,
             ]),
         ]));
 

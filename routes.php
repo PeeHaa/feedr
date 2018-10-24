@@ -4,6 +4,7 @@ namespace PeeHaa\AwesomeFeed;
 
 use Auryn\Injector;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
+use PeeHaa\AwesomeFeed\Presentation\Controller\Administrator\Create as CreateAdministrators;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Administrator\Search;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Authorization\LogIn;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Authorization\LogOut;
@@ -32,5 +33,7 @@ if ($gateKeeper->isAuthorized()) {
     $router->post('createFeed', '/feeds/create', [CreateFeed::class, 'process']);
     $router->get('editFeed', '/feeds/{id:\d+}/{slug:.+}/edit', [EditFeed::class, 'render']);
     $router->post('searchUsers', '/feeds/{id:\d+}/{slug:.+}/administrators/search', [Search::class, 'render']);
+    $router->post('addAdministrators', '/feeds/{id:\d+}/{slug:.+}/administrators/create', [CreateAdministrators::class, 'process']);
+    $router->post('searchRepositories', '/feeds/{id:\d+}/{slug:.+}/repositories/search', [Search::class, 'render']);
     $router->post('logout', '/logout', [LogOut::class, 'process']);
 }

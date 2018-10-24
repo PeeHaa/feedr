@@ -41,6 +41,13 @@ class Feed
         return $this->getById($id);
     }
 
+    public function addAdmins(int $feedId, UserCollection $users): void
+    {
+        foreach ($users as $user) {
+            $this->addAdmin($feedId, $user);
+        }
+    }
+
     public function addAdmin(int $feedId, User $user): void
     {
         $query = '
@@ -152,6 +159,8 @@ class Feed
                 $feedRecord['administrator_url'],
                 $feedRecord['administrator_avatar']
             ));
+
+            $currentFeedId = $feedRecord['feed_id'];
         }
 
         return $administrators;

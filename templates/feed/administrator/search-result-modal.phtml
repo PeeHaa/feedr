@@ -1,5 +1,7 @@
 <?php declare(strict_types=1); ?>
 <?php /** @var \PeeHaa\AwesomeFeed\Authentication\Collection $users */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Administrator\Create $createForm */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Feed\Feed $feed */ ?>
 <div class="modal fade in">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -9,36 +11,39 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <table class="table add-administrator">
-                    <?php if (!count($users)) { ?>
-                        <tr>
-                            <td colspan="2"><?= $this->translate('feed.administrators.search.results.noResults'); ?></td>
-                        </tr>
-                    <?php } else { ?>
-                        <?php foreach ($users as $user) { ?>
+            <form action="<?= $this->url('addAdministrators', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" method="post">
+                <input type="hidden" name="csrfToken" value="<?= $createForm['csrfToken']->getValue(); ?>">
+                <div class="modal-body">
+                    <table class="table add-administrator">
+                        <?php if (!count($users)) { ?>
                             <tr>
-                                <td class="actions">
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="admin" value="<?= $user->getId(); ?>">
-                                        <div class="body">
-                                            <div class="check"></div>
-                                        </div>
-                                        <?= $this->escape($user->getUsername()); ?>
-                                    </label>
-                                </td>
-                                <td class="avatar">
-                                    <img src="<?= $this->escape($user->getAvatarUrl()); ?>">
-                                </td>
+                                <td colspan="2"><?= $this->translate('feed.administrators.search.results.noResults'); ?></td>
                             </tr>
+                        <?php } else { ?>
+                            <?php foreach ($users as $user) { ?>
+                                <tr>
+                                    <td class="actions">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="user[]" value="<?= $this->escape($user->getUsername()); ?>">
+                                            <div class="body">
+                                                <div class="check"></div>
+                                            </div>
+                                            <?= $this->escape($user->getUsername()); ?>
+                                        </label>
+                                    </td>
+                                    <td class="avatar">
+                                        <img src="<?= $this->escape($user->getAvatarUrl()); ?>">
+                                    </td>
+                                </tr>
+                            <?php } ?>
                         <?php } ?>
-                    <?php } ?>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary"><?= $this->translate('feed.administrators.search.results.submit'); ?></button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $this->translate('feed.administrators.search.results.button.close'); ?></button>
-            </div>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $this->translate('feed.administrators.search.results.button.close'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?= $this->translate('feed.administrators.search.results.submit'); ?></button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

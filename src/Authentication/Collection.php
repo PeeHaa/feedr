@@ -58,4 +58,15 @@ class Collection implements \Iterator, \Countable
 
         return $collection;
     }
+
+    public function toArray(): array
+    {
+        $users = [];
+
+        foreach ($this->users as $user) {
+            $users[$user->getId()] = $user->toArray();
+        }
+
+        return $users;
+    }
 }

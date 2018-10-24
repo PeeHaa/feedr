@@ -39,4 +39,14 @@ class User
     {
         return $this->avatarUrl;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id'        => $this->id,
+            'username'  => $this->username,
+            'url'       => $this->url,
+            'avatarUrl' => $this->avatarUrl,
+        ];
+    }
 }
