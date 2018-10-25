@@ -76,6 +76,12 @@ export default class {
     }
 
     insertNewRepository(repository) {
+        const noResultsRow = document.querySelector('table.repositories tr td[colspan="2"]');
+
+        if (noResultsRow) {
+            noResultsRow.parentNode.parentNode.removeChild(noResultsRow.parentNode);
+        }
+
         const rows = document.querySelectorAll('table.repositories tr');
 
         for (let i = 0; i < rows.length; i++) {
