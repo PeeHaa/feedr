@@ -1,0 +1,46 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\GitHub\Collection $repositories */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Repository\Create $createForm */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Feed\Feed $feed */ ?>
+<div class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?= $this->translate('feed.repositories.search.results.title'); ?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="<?= $this->url('addRepositories', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" method="post">
+                <input type="hidden" name="csrfToken" value="<?= $createForm['csrfToken']->getValue(); ?>">
+                <div class="modal-body">
+                    <table class="table add-repository">
+                        <?php if (!count($repositories)) { ?>
+                            <tr>
+                                <td colspan="2"><?= $this->translate('feed.repositories.search.results.noResults'); ?></td>
+                            </tr>
+                        <?php } else { ?>
+                            <?php foreach ($repositories as $repository) { ?>
+                                <tr>
+                                    <td class="actions">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="repository[]" value="<?= $this->escape($repository->getFullName()); ?>">
+                                            <div class="body">
+                                                <div class="check"></div>
+                                            </div>
+                                            <?= $this->escape($repository->getFullName()); ?>
+                                        </label>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } ?>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $this->translate('feed.repositories.search.results.button.close'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?= $this->translate('feed.repositories.search.results.submit'); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

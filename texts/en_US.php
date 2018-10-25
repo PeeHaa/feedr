@@ -28,6 +28,7 @@ $texts = [
     'feed.edit.repositories.title'                          => 'Repositories the feed is watching',
     'feed.edit.repositories.add.title'                      => 'Add repository',
     'feed.edit.repositories.add.form.search.placeholder'    => 'Keyword(s), repository name or URL',
+    'feed.edit.repositories.table.noResults'                => 'There are no repositories being watched by this feed yet',
     'feed.edit.administrators.title'                        => 'Administrators of this feed',
     'feed.edit.administrators.add.title'                    => 'Add administrator',
     'feed.edit.administrators.add.form.search.placeholder'  => 'GitHub username or profile URL',
@@ -38,4 +39,9 @@ $texts = [
     'feed.administrators.search.results.submit'             => 'Add administrator(s)',
     'feed.administrators.search.results.button.close'       => 'Close',
     'feed.administrators.search.results.noResults'          => 'No users found matching the criteria',
+
+    'feed.repositories.search.results.title'                => 'Found repositories',
+    'feed.repositories.search.results.submit'               => 'Add repositories',
+    'feed.repositories.search.results.button.close'         => 'Close',
+    'feed.repositories.search.results.noResults'            => 'No repositories found matching the criteria',
 ];

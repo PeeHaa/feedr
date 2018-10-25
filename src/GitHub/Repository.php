@@ -2,25 +2,62 @@
 
 namespace PeeHaa\AwesomeFeed\GitHub;
 
+use PeeHaa\AwesomeFeed\Authentication\User;
+
 class Repository
 {
-    private $owner;
+    private $id;
 
     private $name;
 
-    public function __construct(string $owner, string $name)
+    private $fullName;
+
+    private $url;
+
+    private $owner;
+
+    public function __construct(int $id, string $name, string $fullName, string $url, User $owner)
     {
-        $this->owner = $owner;
-        $this->name  = $name;
+        $this->id       = $id;
+        $this->name     = $name;
+        $this->fullName = $fullName;
+        $this->url      = $url;
+        $this->owner    = $owner;
     }
 
-    public function getOwner(): string
+    public function getId(): int
     {
-        return $this->owner;
+        return $this->id;
     }
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->fullName;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    public function getOwner(): User
+    {
+        return $this->owner;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id'       => $this->id,
+            'name'     => $this->name,
+            'fullName' => $this->fullName,
+            'url'      => $this->url,
+            'owner'    => $this->owner->toArray(),
+        ];
     }
 }

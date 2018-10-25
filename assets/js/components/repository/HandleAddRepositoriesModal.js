@@ -60,13 +60,13 @@ export default class {
     }
 
     processSuccessfulRequest(response) {
-        const administrators = JSON.parse(response.target.responseText);
+        const repositories = JSON.parse(response.target.responseText);
 
-        Object.keys(administrators).forEach((key) => {
-            this.insertNewAdministrator(administrators[key]);
+        Object.keys(repositories).forEach((key) => {
+            this.insertNewRepository(repositories[key]);
         });
 
-        document.querySelector('form.searchUsers input[name="query"]').value = '';
+        document.querySelector('form.searchRepositories input[name="query"]').value = '';
 
         this.close();
     }
@@ -75,46 +75,39 @@ export default class {
         this.close();
     }
 
-    insertNewAdministrator(administrator) {
-        const rows = document.querySelectorAll('table.administrators tr');
+    insertNewRepository(repository) {
+        const rows = document.querySelectorAll('table.repositories tr');
 
         for (let i = 0; i < rows.length; i++) {
-            if (administrator.username.toLowerCase() > rows[i].querySelector('td:nth-child(2)').textContent.toLowerCase()) {
+            if (repository.fullName.toLowerCase() > rows[i].querySelector('td:nth-child(1)').textContent.toLowerCase()) {
                 continue;
             }
 
-            rows[i].parentNode.insertBefore(this.buildNewAdministratorRow(administrator), rows[i]);
+            rows[i].parentNode.insertBefore(this.buildNewRepositoryRow(repository), rows[i]);
 
             return;
         }
 
-        document.querySelector('table.administrators tbody').appendChild(this.buildNewAdministratorRow(administrator));
+        document.querySelector('table.repositories tbody').appendChild(this.buildNewRepositoryRow(repository));
     }
 
-    buildNewAdministratorRow(administrator) {
+    buildNewRepositoryRow(repository) {
         const row = document.createElement('tr');
 
-        const avatarColumn   = document.createElement('td');
-        const usernameColumn = document.createElement('td');
+        const nameColumn = document.createElement('td');
         const actionsColumn  = document.createElement('td');
 
-        avatarColumn.classList.add('avatar');
         actionsColumn.classList.add('actions');
 
-        const avatar       = document.createElement('img');
         const deleteButton = document.createElement('button');
-
-        avatar.src = administrator.avatarUrl;
 
         deleteButton.classList.add('btn', 'btn-danger');
         deleteButton.textContent = 'D';
 
-        avatarColumn.appendChild(avatar);
-        usernameColumn.textContent = administrator.username;
+        nameColumn.textContent = repository.fullName;
         actionsColumn.appendChild(deleteButton);
 
-        row.appendChild(avatarColumn);
-        row.appendChild(usernameColumn);
+        row.appendChild(nameColumn);
         row.appendChild(actionsColumn);
 
         return row;

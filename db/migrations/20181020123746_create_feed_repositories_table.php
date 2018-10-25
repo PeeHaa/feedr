@@ -10,17 +10,15 @@ class CreateFeedRepositoriesTable extends AbstractMigration
 
         $table
             ->addColumn('id', 'biginteger')
-            ->addColumn('owner', 'string', ['limit' => 255])
+            ->addColumn('owner_id', 'biginteger')
             ->addColumn('name', 'string', ['limit' => 255])
+            ->addColumn('full_name', 'string', ['limit' => 255])
             ->addColumn('url', 'string', ['limit' => 255])
-            ->addColumn('avatar_url', 'string', ['limit' => 255])
-            ->addColumn('owner_url', 'string', ['limit' => 255])
-            ->addIndex(['owner', 'name'], [
-                'unique' => true,
-                'name'   => 'idx_repositories_owner_name',
+            ->addForeignKeyWithName('fk_repositories_users', 'owner_id', 'users', 'id', [
+                'delete' => 'CASCADE',
             ])
-            ->addIndex('owner')
             ->addIndex('name')
+            ->addIndex('full_name')
             ->create()
         ;
 

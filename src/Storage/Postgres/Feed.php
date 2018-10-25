@@ -8,6 +8,8 @@ use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\Feed\Collection;
 use PeeHaa\AwesomeFeed\Feed\Feed as Entity;
 use PeeHaa\AwesomeFeed\Form\Feed\Create;
+use PeeHaa\AwesomeFeed\GitHub\Collection as RepositoryCollection;
+use PeeHaa\AwesomeFeed\GitHub\Repository;
 
 class Feed
 {
@@ -64,20 +66,51 @@ class Feed
         ]);
     }
 
+    public function addRepositories(int $feedId, RepositoryCollection $repositories): void
+    {
+        foreach ($repositories as $repository) {
+            $this->addRepository($feedId, $repository);
+        }
+    }
+
+    public function addRepository(int $feedId, Repository $repository): void
+    {
+        $query = '
+            INSERT INTO feeds_repositories
+              (feed_id, repository_id)
+            VALUES 
+              (:feed_id, :repository_id)
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute([
+            'feed_id'       => $feedId,
+            'repository_id' => $repository->getId(),
+        ]);
+    }
+
     public function getById(int $id): ?Entity
     {
         $query = '
             SELECT feeds.id AS feed_id, feeds.name AS feed_name, feeds.slug,
               creator.id AS user_id, creator.username, creator.url, creator.avatar,
               administrators.id AS administrator_id, administrators.username AS administrator_username,
-              administrators.url AS administrator_url, administrators.avatar AS administrator_avatar
+              administrators.url AS administrator_url, administrators.avatar AS administrator_avatar,
+              repositories.id AS repository_id, repositories.name AS repository_name,
+              repositories.full_name AS repository_full_name, repositories.url AS repository_url,
+              owner.id AS owner_id, owner.username AS owner_username, owner.url AS owner_url,
+              owner.avatar AS owner_avatar
             FROM feeds
               JOIN users AS creator ON creator.id = feeds.created_by
               JOIN feed_admins ON feed_admins.feed_id = feeds.id
               JOIN users AS administrators ON administrators.id = feed_admins.user_id
+              LEFT JOIN feeds_repositories ON feeds_repositories.feed_id = feeds.id
+              LEFT JOIN repositories ON repositories.id = feeds_repositories.repository_id
+              LEFT JOIN users AS owner ON owner.id = repositories.owner_id
             WHERE feeds.id = :id
             ORDER BY feeds.name ASC,
-              administrators.username ASC
+              administrators.username ASC,
+              repositories.full_name ASC
         ';
 
         $stmt = $this->dbConnection->prepare($query);
@@ -87,6 +120,7 @@ class Feed
 
         $recordset      = $stmt->fetchAll();
         $administrators = $this->getAdministratorsByFeedFeedsRecordset($recordset);
+        $repositories   = $this->getRepositoriesByFeedFeedsRecordset($recordset);
 
         if (!$recordset) {
             return null;
@@ -97,7 +131,8 @@ class Feed
             $recordset[0]['feed_name'],
             $recordset[0]['slug'],
             new User($recordset[0]['user_id'], $recordset[0]['username'], $recordset[0]['url'], $recordset[0]['avatar']),
-            $administrators[$recordset[0]['feed_id']]
+            $administrators[$recordset[0]['feed_id']],
+            $repositories[$recordset[0]['feed_id']]
         );
     }
 
@@ -108,12 +143,19 @@ class Feed
               creator.id AS creator_id, creator.username AS creator_username, creator.url AS creator_url,
               creator.avatar AS creator_avatar,
               administrators.id AS administrator_id, administrators.username AS administrator_username,
-              administrators.url AS administrator_url, administrators.avatar AS administrator_avatar
+              administrators.url AS administrator_url, administrators.avatar AS administrator_avatar,
+              repositories.id AS repository_id, repositories.name AS repository_name,
+              repositories.full_name AS repository_full_name, repositories.url AS repository_url,
+              owner.id AS owner_id, owner.username AS owner_username, owner.url AS owner_url,
+              owner.avatar AS owner_avatar
             FROM feeds
               JOIN users AS creator ON creator.id = feeds.created_by
               JOIN feed_admins ON feed_admins.feed_id = feeds.id
                 AND feed_admins.user_id = :user_id
               JOIN users AS administrators ON administrators.id = feed_admins.user_id
+              LEFT JOIN feeds_repositories ON feeds_repositories.feed_id = feeds.id
+              LEFT JOIN repositories ON repositories.id = feeds_repositories.repository_id
+              LEFT JOIN users AS owner ON owner.id = repositories.owner_id
             ORDER BY feeds.name ASC,
               administrators.username ASC
         ';
@@ -126,6 +168,7 @@ class Feed
         $collection = new Collection();
         $recordset  = $stmt->fetchAll();
         $administrators = $this->getAdministratorsByFeedFeedsRecordset($recordset);
+        $repositories   = $this->getRepositoriesByFeedFeedsRecordset($recordset);
 
         foreach ($stmt->fetchAll() as $record) {
             $collection->add(new Entity(
@@ -133,7 +176,8 @@ class Feed
                 $record['feed_name'],
                 $record['slug'],
                 new User($record['user_id'], $record['username'], $record['url'], $record['avatar']),
-                $administrators[$record['feed_id']]
+                $administrators[$record['feed_id']],
+                $repositories[$record['feed_id']]
             ));
         }
 
@@ -164,5 +208,41 @@ class Feed
         }
 
         return $administrators;
+    }
+
+    /**
+     * @return RepositoryCollection[]
+     */
+    private function getRepositoriesByFeedFeedsRecordset(array $feedRecordset): array
+    {
+        $currentFeedId = null;
+        $repositories  = [];
+
+        foreach ($feedRecordset as $feedRecord) {
+            if ($feedRecord['feed_id'] !== $currentFeedId) {
+                $repositories[$feedRecord['feed_id']] = new RepositoryCollection();
+            }
+
+            if ($feedRecord['repository_id'] == null) {
+                continue;
+            }
+
+            $repositories[$feedRecord['feed_id']]->add(new Repository(
+                $feedRecord['repository_id'],
+                $feedRecord['repository_name'],
+                $feedRecord['repository_full_name'],
+                $feedRecord['repository_url'],
+                new User(
+                    $feedRecord['owner_id'],
+                    $feedRecord['owner_username'],
+                    $feedRecord['owner_url'],
+                    $feedRecord['owner_avatar']
+                )
+            ));
+
+            $currentFeedId = $feedRecord['feed_id'];
+        }
+
+        return $repositories;
     }
 }

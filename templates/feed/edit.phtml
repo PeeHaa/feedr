@@ -12,8 +12,9 @@
                         </div>
                         <div class="panel-body">
                             <form action="<?= $this->url('searchRepositories', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" method="post" class="searchRepositories">
+                                <input type="hidden" name="csrfToken" value="<?= $searchForm['csrfToken']->getValue(); ?>">
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="search" placeholder="<?= $this->translate('feed.edit.repositories.add.form.search.placeholder'); ?>">
+                                    <input type="text" class="form-control" name="query" placeholder="<?= $this->translate('feed.edit.repositories.add.form.search.placeholder'); ?>">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-primary" type="submit"><i class="icon-search"></i></button>
                                     </div>
@@ -49,10 +50,24 @@
                         </div>
                         <div class="panel-body">
                             <table class="table repositories">
-                                <tr>
-                                    <td>PeeHaa/Feedr</td>
-                                    <td class="actions"><button class="btn btn-danger">D</button></td>
-                                </tr>
+                                <tbody>
+                                    <?php if (!count($feed->getRepositories())) { ?>
+                                        <tr>
+                                            <td colspan="2">
+                                                <?= $this->translate('feed.edit.repositories.table.noResults'); ?>
+                                            </td>
+                                        </tr>
+                                    <?php } else { ?>
+                                        <?php foreach ($feed->getRepositories() as $repository) { ?>
+                                            <tr>
+                                                <td><?= $this->escape($repository->getFullName()); ?></td>
+                                                <td class="actions">
+                                                    <button class="btn btn-danger">D</button>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
