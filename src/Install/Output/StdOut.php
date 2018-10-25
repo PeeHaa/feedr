@@ -6,10 +6,10 @@ use PeeHaa\AwesomeFeed\Install\Output;
 
 class StdOut implements Output
 {
-    private const WARNING_PREFIX = "\e[33m[ERROR]\e[0m";
-    private const ERROR_PREFIX = "\e[31m[ERROR]\e[0m";
-    private const INFO_PREFIX = "\e[1;34m[INFO]\e[0m";
-    private const SUCCESS_PREFIX = "\e[32m[DONE]\e[0m";
+    private const WARNING_PREFIX = "\e[43;37;1m[ERROR]\e[0m";
+    private const ERROR_PREFIX = "\e[41;37;1m[ERROR]\e[0m";
+    private const INFO_PREFIX = "\e[44;37;1m[INFO]\e[0m";
+    private const SUCCESS_PREFIX = "\e[42;37;1m[DONE]\e[0m";
 
     public function header(string $data): void
     {
