@@ -6,7 +6,7 @@ use PeeHaa\AwesomeFeed\Install\Output;
 
 class StdOut implements Output
 {
-    private const WARNING_PREFIX = "\e[43;37;1m[ERROR]\e[0m";
+    private const WARNING_PREFIX = "\e[43;37;1m[WARN]\e[0m";
     private const ERROR_PREFIX = "\e[41;37;1m[ERROR]\e[0m";
     private const INFO_PREFIX = "\e[44;37;1m[INFO]\e[0m";
     private const SUCCESS_PREFIX = "\e[42;37;1m[DONE]\e[0m";
