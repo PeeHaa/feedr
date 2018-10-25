@@ -8,7 +8,7 @@ class Collection implements \Iterator, \Countable
 
     public function add(Feed $feed): void
     {
-        $this->feeds[] = $feed;
+        $this->feeds[$feed->getId()] = $feed;
     }
 
     public function current(): Feed

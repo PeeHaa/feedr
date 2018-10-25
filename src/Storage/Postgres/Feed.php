@@ -165,17 +165,22 @@ class Feed
             'user_id' => $user->getId(),
         ]);
 
-        $collection = new Collection();
-        $recordset  = $stmt->fetchAll();
+        $collection     = new Collection();
+        $recordset      = $stmt->fetchAll();
         $administrators = $this->getAdministratorsByFeedFeedsRecordset($recordset);
         $repositories   = $this->getRepositoriesByFeedFeedsRecordset($recordset);
 
-        foreach ($stmt->fetchAll() as $record) {
+        foreach ($recordset as $record) {
             $collection->add(new Entity(
                 $record['feed_id'],
                 $record['feed_name'],
                 $record['slug'],
-                new User($record['user_id'], $record['username'], $record['url'], $record['avatar']),
+                new User(
+                    $record['creator_id'],
+                    $record['creator_username'],
+                    $record['creator_url'],
+                    $record['creator_avatar']
+                ),
                 $administrators[$record['feed_id']],
                 $repositories[$record['feed_id']]
             ));
