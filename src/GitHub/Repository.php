@@ -25,6 +25,22 @@ class Repository
         $this->owner    = $owner;
     }
 
+    public static function createFromArray(array $data): self
+    {
+        return new self(
+            $data['id'],
+            $data['name'],
+            $data['fullName'],
+            $data['url'],
+            new User(
+                $data['owner']['id'],
+                $data['owner']['username'],
+                $data['owner']['url'],
+                $data['owner']['avatarUrl']
+            )
+        );
+    }
+
     public function getId(): int
     {
         return $this->id;

@@ -5,8 +5,9 @@ namespace PeeHaa\AwesomeFeed\Install\Task;
 use Composer\IO\IOInterface;
 use PeeHaa\AwesomeFeed\Install\Output;
 use PeeHaa\AwesomeFeed\Install\Task;
-use PeeHaa\AwesomeFeed\Install\Task\GenerateConfig\ReloadRoutes;
 use PeeHaa\AwesomeFeed\Install\Task\GenerateConfig\GitHub;
+use PeeHaa\AwesomeFeed\Install\Task\GenerateConfig\Redis;
+use PeeHaa\AwesomeFeed\Install\Task\GenerateConfig\ReloadRoutes;
 
 class GenerateConfig implements Task
 {
@@ -30,6 +31,7 @@ class GenerateConfig implements Task
 
         $configuration = (new ReloadRoutes())->run($output, $configuration);
         $configuration = (new GitHub())->run($output, $configuration, $this->cliPrompt);
+        $configuration = (new Redis())->run($output, $configuration, $this->cliPrompt);
 
         $output->info('Writing configuration file');
 

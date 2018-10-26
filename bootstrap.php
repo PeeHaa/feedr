@@ -4,6 +4,7 @@ namespace PeeHaa\AwesomeFeed;
 
 use Amp\Artax\Client;
 use Amp\Artax\DefaultClient;
+use Amp\Redis\Client as RedisClient;
 use Auryn\Injector;
 use CodeCollab\CsrfToken\Generator\Generator;
 use CodeCollab\CsrfToken\Generator\RandomBytes32;
@@ -48,6 +49,51 @@ $auryn = new Injector();
 $auryn->share($auryn);
 
 /**
+ * Set up the environment
+ */
+$configuration = require_once __DIR__ . '/config/config.php';
+
+/**
+ * Set up the database connection
+ */
+$auryn->share(\PDO::class);
+$auryn->delegate(\PDO::class, function() use ($configuration) {
+    $dbConnection = new \PDO(
+        sprintf('pgsql:dbname=%s;host=%s', $configuration['database']['name'], $configuration['database']['host']),
+        $configuration['database']['username'],
+        $configuration['database']['password']
+    );
+
+    $dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    $dbConnection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+
+    return $dbConnection;
+});
+
+/**
+ * Set up the HTTP client
+ */
+$auryn->alias(Client::class, DefaultClient::class);
+
+/**
+ * Set up the GitHub API
+ */
+$auryn->define(Credentials::class, [
+    ':clientId'     => $configuration['gitHub']['clientId'],
+    ':clientSecret' => $configuration['gitHub']['clientSecret'],
+]);
+$auryn->define(AccessToken::class, [
+    ':accessToken' => $configuration['gitHub']['accessToken'],
+]);
+
+/**
+ * Set up redis
+ */
+$auryn->define(RedisClient::class, [
+    ':uri' => sprintf('tcp://%s:%s', $configuration['redis']['host'], $configuration['redis']['port']),
+]);
+
+/**
  * Prevent further execution when on CLI
  */
 if (php_sapi_name() === 'cli') {
@@ -60,11 +106,6 @@ if (php_sapi_name() === 'cli') {
 $whoops = new Run();
 $whoops->pushHandler(new PrettyPageHandler());
 $whoops->register();
-
-/**
- * Set up the environment
- */
-$configuration = require_once __DIR__ . '/config/config.php';
 
 /**
  * Set up encryption
@@ -119,23 +160,6 @@ $session = $auryn->make(Session::class);
 $auryn->alias(Token::class, Handler::class);
 $auryn->alias(Generator::class, RandomBytes32::class);
 $auryn->alias(Storage::class, TokenSession::class);
-
-/**
- * Set up the database connection
- */
-$auryn->share(\PDO::class);
-$auryn->delegate(\PDO::class, function() use ($configuration) {
-    $dbConnection = new \PDO(
-        sprintf('pgsql:dbname=%s;host=%s', $configuration['database']['name'], $configuration['database']['host']),
-        $configuration['database']['username'],
-        $configuration['database']['password']
-    );
-
-    $dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    $dbConnection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-
-    return $dbConnection;
-});
 
 /**
  * Set up the gate keeper
@@ -196,22 +220,6 @@ $auryn->share(Html::class);
 $auryn->define(Html::class, [
     ':basePage'     => '/page.phtml',
     ':templatePath' => __DIR__ . '/templates',
-]);
-
-/**
- * Set up teh HTTP client
- */
-$auryn->alias(Client::class, DefaultClient::class);
-
-/**
- * Set up the GitHub API
- */
-$auryn->define(Credentials::class, [
-    ':clientId'     => $configuration['gitHub']['clientId'],
-    ':clientSecret' => $configuration['gitHub']['clientSecret'],
-]);
-$auryn->define(AccessToken::class, [
-    ':accessToken' => $configuration['gitHub']['accessToken'],
 ]);
 
 /**

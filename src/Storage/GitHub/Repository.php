@@ -6,10 +6,13 @@ use Amp\Artax\Client;
 use Amp\Artax\Request;
 use Amp\Artax\Response;
 use Amp\Promise;
+use Amp\Success;
 use PeeHaa\AwesomeFeed\Authentication\User as UserEntity;
 use PeeHaa\AwesomeFeed\GitHub\AccessToken;
 use PeeHaa\AwesomeFeed\GitHub\ApiRequestInformation;
 use PeeHaa\AwesomeFeed\GitHub\Collection;
+use PeeHaa\AwesomeFeed\GitHub\Release\Collection as ReleaseCollection;
+use PeeHaa\AwesomeFeed\GitHub\Release\Release;
 use PeeHaa\AwesomeFeed\GitHub\Repository as RepositoryEntity;
 use function Amp\call;
 use function Amp\Promise\wait;
@@ -138,5 +141,36 @@ class Repository
 
             return $collection;
         }));
+    }
+
+    public function getReleasesForRepository(RepositoryEntity $repository): Promise
+    {
+        return call(function() use ($repository) {
+            $request = (new Request(ApiRequestInformation::BASE_URL . '/repos/' . $repository->getFullName() . '/releases'))
+                ->withHeader('Accept', ApiRequestInformation::VERSION_HEADER)
+                ->withHeader('Authorization', 'token ' . $this->accessToken->getToken())
+            ;
+
+            /** @var Response $response */
+            $response = yield $this->httpClient->request($request);
+            $body     = yield $response->getBody();
+
+            $collection = new ReleaseCollection();
+
+            $releases = json_decode($body, true);
+
+            foreach ($releases as $release) {
+                $collection->add(new Release(
+                    $release['id'],
+                    $repository->getId(),
+                    $release['name'],
+                    $release['body'],
+                    $release['html_url'],
+                    new \DateTimeImmutable($release['published_at'])
+                ));
+            }
+
+            return $collection;
+        });
     }
 }

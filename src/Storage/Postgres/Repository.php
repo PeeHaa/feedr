@@ -2,6 +2,7 @@
 
 namespace PeeHaa\AwesomeFeed\Storage\Postgres;
 
+use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\GitHub\Collection;
 use PeeHaa\AwesomeFeed\GitHub\Repository as RepositoryInfo;
 
@@ -86,5 +87,34 @@ class Repository
             'full_name' => $repository->getFullName(),
             'url'       => $repository->getUrl(),
         ]);
+    }
+
+    public function getAll(): Collection
+    {
+        $query = '
+            SELECT repositories.id AS repository_id, repositories.name AS repository_name,
+              repositories.full_name AS repository_full_name, repositories.url AS repository_url,
+              users.id AS user_id, users.username AS user_username, users.url AS user_url, users.avatar AS user_avatar
+            FROM repositories
+            JOIN users ON users.id = repositories.owner_id
+            ORDER BY repository_id ASC
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute();
+
+        $collection = new Collection();
+
+        foreach ($stmt->fetchAll() as $record) {
+            $collection->add(new RepositoryInfo(
+                $record['repository_id'],
+                $record['repository_name'],
+                $record['repository_full_name'],
+                $record['repository_url'],
+                new User($record['user_id'], $record['user_username'], $record['user_url'], $record['user_avatar'])
+            ));
+        }
+
+        return $collection;
     }
 }

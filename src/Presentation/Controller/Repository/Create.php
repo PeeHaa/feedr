@@ -5,10 +5,12 @@ namespace PeeHaa\AwesomeFeed\Presentation\Controller\Repository;
 use CodeCollab\Http\Request\Request;
 use CodeCollab\Http\Response\Response;
 use PeeHaa\AwesomeFeed\Form\Repository\Create as Form;
+use PeeHaa\AwesomeFeed\Redis\Client as RedisClient;
 use PeeHaa\AwesomeFeed\Storage\GitHub\Repository as GitHubApi;
 use PeeHaa\AwesomeFeed\Storage\Postgres\Feed as FeedStorage;
 use PeeHaa\AwesomeFeed\Storage\Postgres\Repository as RepositoryStorage;
 use PeeHaa\AwesomeFeed\Storage\Postgres\User as UserStorage;
+use function Amp\Promise\wait;
 
 class Create
 {
@@ -26,6 +28,7 @@ class Create
         UserStorage $userStorage,
         RepositoryStorage $repositoryStorage,
         GitHubApi $gitHubStorage,
+        RedisClient $redisClient,
         string $id
     ): Response {
         $form->bindRequest($request);
@@ -40,7 +43,13 @@ class Create
         foreach ($repositories as $repository) {
             $userStorage->store($repository->getOwner());
 
+            $needsToBeEnqueued = !$repositoryStorage->exists($repository);
+
             $repositoryStorage->store($repository);
+
+            if ($needsToBeEnqueued) {
+                wait($redisClient->pushTaskToFront($repository));
+            }
         }
 
         $storage->addRepositories((int) $id, $repositories);

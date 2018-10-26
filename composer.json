@@ -13,6 +13,7 @@
     "require": {
         "php": "^7.2",
         "amphp/artax": "^3.0",
+        "amphp/redis": "^0.3.3",
         "cocur/slugify": "^3.1",
         "codecollab/form": "^1.0",
         "codecollab/http": "^1.3",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1365c52ab4312a033aa742aed30c2f1",
+    "content-hash": "c8372cb3692cc437bbff99f565b4aad4",
     "packages": [
         {
             "name": "amphp/amp",
@@ -559,6 +559,58 @@
             "description": "Asynchronous process manager.",
             "homepage": "https://github.com/amphp/process",
             "time": "2018-04-08T18:55:42+00:00"
+        },
+        {
+            "name": "amphp/redis",
+            "version": "v0.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amphp/redis.git",
+                "reference": "bf4155dd431c9a37631ac3597b71567ed4a41fa2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amphp/redis/zipball/bf4155dd431c9a37631ac3597b71567ed4a41fa2",
+                "reference": "bf4155dd431c9a37631ac3597b71567ed4a41fa2",
+                "shasum": ""
+            },
+            "require": {
+                "amphp/amp": "^2",
+                "amphp/cache": "^1",
+                "amphp/socket": "^0.10",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "amphp/phpunit-util": "^1",
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "phpunit/phpunit": "^6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Amp\\Redis\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Niklas Keller",
+                    "email": "me@kelunik.com"
+                }
+            ],
+            "description": "A non-blocking Redis client for Amp.",
+            "homepage": "https://github.com/amphp/redis",
+            "keywords": [
+                "amp",
+                "amphp",
+                "async",
+                "client",
+                "redis"
+            ],
+            "time": "2017-11-17T14:09:59+00:00"
         },
         {
             "name": "amphp/socket",
