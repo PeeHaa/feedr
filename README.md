@@ -1,5 +1,7 @@
 # Awesome Feed
 
+[![Build Status](https://travis-ci.com/peehaa/feedr.svg?branch=master)](https://travis-ci.com/peehaa/feedr)
+
 Converts any resource into an RSS feed
 
 ## Requirements
