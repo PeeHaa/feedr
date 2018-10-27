@@ -20,4 +20,29 @@ class UserTest extends TestCase
     {
         $this->assertSame(13, $this->user->getId());
     }
+
+    public function testGetUsername()
+    {
+        $this->assertSame('TestUser', $this->user->getUsername());
+    }
+
+    public function testGetUrl()
+    {
+        $this->assertSame('https://github.com/TestUser', $this->user->getUrl());
+    }
+
+    public function testGetAvatarUrl()
+    {
+        $this->assertSame('https://github.com/avatar/png', $this->user->getAvatarUrl());
+    }
+
+    public function testToArray()
+    {
+        $this->assertSame([
+            'id'        => 13,
+            'username'  => 'TestUser',
+            'url'       => 'https://github.com/TestUser',
+            'avatarUrl' => 'https://github.com/avatar/png',
+        ], $this->user->toArray());
+    }
 }
