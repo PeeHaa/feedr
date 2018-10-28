@@ -9,6 +9,8 @@ use PeeHaa\AwesomeFeed\Feed\Collection;
 use PeeHaa\AwesomeFeed\Feed\Feed as Entity;
 use PeeHaa\AwesomeFeed\Form\Feed\Create;
 use PeeHaa\AwesomeFeed\GitHub\Collection as RepositoryCollection;
+use PeeHaa\AwesomeFeed\GitHub\Release\Release;
+use PeeHaa\AwesomeFeed\GitHub\Release\Collection as ReleaseCollection;
 use PeeHaa\AwesomeFeed\GitHub\Repository;
 
 class Feed
@@ -132,7 +134,8 @@ class Feed
             $recordset[0]['slug'],
             new User($recordset[0]['user_id'], $recordset[0]['username'], $recordset[0]['url'], $recordset[0]['avatar']),
             $administrators[$recordset[0]['feed_id']],
-            $repositories[$recordset[0]['feed_id']]
+            $repositories[$recordset[0]['feed_id']],
+            $this->getReleasesForRepositories($repositories[$recordset[0]['feed_id']])
         );
     }
 
@@ -182,7 +185,8 @@ class Feed
                     $record['creator_avatar']
                 ),
                 $administrators[$record['feed_id']],
-                $repositories[$record['feed_id']]
+                $repositories[$record['feed_id']],
+                $this->getReleasesForRepositories($repositories[$record['feed_id']])
             ));
         }
 
@@ -249,5 +253,66 @@ class Feed
         }
 
         return $repositories;
+    }
+
+    private function getReleasesForRepositories(RepositoryCollection $repositories): ReleaseCollection
+    {
+        $repositoryIds = [];
+
+        foreach ($repositories as $repository) {
+            $repositoryIds[] = $repository->getId();
+        }
+
+        $repositoryIds = array_unique($repositoryIds);
+
+        $releases = new ReleaseCollection();
+
+        if (!count($repositoryIds)) {
+            return $releases;
+        }
+
+        $preparedInQuery = implode(',', array_fill(0, count($repositoryIds), '?'));
+
+        $query = '
+            SELECT repository_releases.id AS release_id, repository_releases.repository_id AS repository_id,
+              repository_releases.name AS release_name, repository_releases.body AS release_body,
+              repository_releases.url AS release_url, repository_releases.published_at,
+              repositories.name AS repository_name, repositories.full_name AS repository_full_name,
+              repositories.url AS repository_url, users.id AS owner_id, users.username AS owner_username,
+              users.url AS owner_url, users.avatar AS owner_avatar
+            FROM repository_releases
+            JOIN repositories ON repositories.id = repository_releases.repository_id
+            JOIN users ON users.id = repositories.owner_id
+            WHERE repository_releases.repository_id IN (' . $preparedInQuery . ')
+            ORDER BY repository_releases.published_at DESC
+            LIMIT 100
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute($repositoryIds);
+
+        foreach ($stmt->fetchAll() as $release) {
+            $releases->add(new Release(
+                $release['release_id'],
+                $release['release_name'],
+                $release['release_body'],
+                $release['release_url'],
+                new Repository(
+                    $release['repository_id'],
+                    $release['repository_name'],
+                    $release['repository_full_name'],
+                    $release['repository_url'],
+                    new User(
+                        $release['owner_id'],
+                        $release['owner_username'],
+                        $release['owner_url'],
+                        $release['owner_avatar']
+                    )
+                ),
+                new \DateTimeImmutable($release['published_at'])
+            ));
+        }
+
+        return $releases;
     }
 }

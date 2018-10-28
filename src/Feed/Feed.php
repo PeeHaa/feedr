@@ -5,6 +5,7 @@ namespace PeeHaa\AwesomeFeed\Feed;
 use PeeHaa\AwesomeFeed\Authentication\Collection as AdministratorCollection;
 use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\GitHub\Collection as RepositoryCollection;
+use PeeHaa\AwesomeFeed\GitHub\Release\Collection as ReleaseCollection;
 use PeeHaa\AwesomeFeed\GitHub\Repository;
 
 class Feed
@@ -21,13 +22,16 @@ class Feed
 
     private $repositories;
 
+    private $releases;
+
     public function __construct(
         int $id,
         string $name,
         string $slug,
         User $user,
         AdministratorCollection $administrators,
-        RepositoryCollection $repositories
+        RepositoryCollection $repositories,
+        ReleaseCollection $releases
     )
     {
         $this->id             = $id;
@@ -36,6 +40,7 @@ class Feed
         $this->createdBy      = $user;
         $this->administrators = $administrators;
         $this->repositories   = $repositories;
+        $this->releases       = $releases;
     }
 
     public function getId(): int
@@ -76,5 +81,10 @@ class Feed
     public function isRepositoryAdded(Repository $repository): bool
     {
         return $this->repositories->contains($repository);
+    }
+
+    public function getReleases(): ReleaseCollection
+    {
+        return $this->releases;
     }
 }

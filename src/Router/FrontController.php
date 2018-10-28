@@ -60,7 +60,6 @@ class FrontController
     {
         /** @noinspection PhpUnusedLocalVariableInspection */
         // phpcs:ignore SlevomatCodingStandard.Variables.UnusedVariable.UnusedVariable
-        //var_dump($routeInfo);die;
         [$_, $callback, $vars] = $routeInfo;
 
         $vars = array_filter($vars, static function($var) {

@@ -162,10 +162,10 @@ class Repository
             foreach ($releases as $release) {
                 $collection->add(new Release(
                     $release['id'],
-                    $repository->getId(),
                     $release['name'],
                     $release['body'],
                     $release['html_url'],
+                    $repository,
                     new \DateTimeImmutable($release['published_at'])
                 ));
             }

@@ -1,0 +1,22 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Feed\Collection $overview */ ?>
+<div class="panel">
+    <div class="panel-title">
+        <h5><?= $this->translate('dashboard.activity.title'); ?></h5>
+    </div>
+    <div class="panel-body">
+        <table class="table feeds">
+            <?php if (!count($overview)) { ?>
+                <p><?= $this->translate('dashboard.activity.noResults'); ?></p>
+            <?php } else { ?>
+                <ol>
+                    <li><i class="icon-checkmark"></i> You added %s as administrator to feed %s</li>
+                    <li><i class="icon-checkmark"></i> %s added you to administrators of feed %s</li>
+                    <li><i class="icon-checkmark"></i> You created a new feed %s</li>
+                    <li><i class="icon-checkmark"></i> Entry %s of feed %s has been clicked 10 times</li>
+                    <li><i class="icon-share"></i> User-Agent %s (ip: %s) started consuming feed %s</li>
+                </ol>
+            <?php } ?>
+        </table>
+    </div>
+</div>

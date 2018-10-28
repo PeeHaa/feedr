@@ -60,7 +60,7 @@ class Release
         $stmt = $this->dbConnection->prepare($query);
         $stmt->execute([
             'id'            => $release->getId(),
-            'repository_id' => $release->getRepositoryId(),
+            'repository_id' => $release->getRepository()->getId(),
             'name'          => $release->getName(),
             'body'          => $release->getBody(),
             'url'           => $release->getUrl(),
@@ -83,7 +83,7 @@ class Release
         $stmt = $this->dbConnection->prepare($query);
         $stmt->execute([
             'id'            => $release->getId(),
-            'repository_id' => $release->getRepositoryId(),
+            'repository_id' => $release->getRepository()->getId(),
             'name'          => $release->getName(),
             'body'          => $release->getBody(),
             'url'           => $release->getUrl(),

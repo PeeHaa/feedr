@@ -2,11 +2,11 @@
 
 namespace PeeHaa\AwesomeFeed\GitHub\Release;
 
+use PeeHaa\AwesomeFeed\GitHub\Repository;
+
 class Release
 {
     private $id;
-
-    private $repositoryId;
 
     private $name;
 
@@ -14,33 +14,30 @@ class Release
 
     private $url;
 
+    private $repository;
+
     private $publishedDate;
 
     public function __construct(
         int $id,
-        int $repositoryId,
         string $name,
         string $body,
         string $url,
+        Repository $repository,
         \DateTimeImmutable $publishedDate
     )
     {
         $this->id            = $id;
-        $this->repositoryId  = $repositoryId;
         $this->name          = $name;
         $this->body          = $body;
         $this->url           = $url;
+        $this->repository    = $repository;
         $this->publishedDate = $publishedDate;
     }
 
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function getRepositoryId(): int
-    {
-        return $this->repositoryId;
     }
 
     public function getName(): string
@@ -58,6 +55,11 @@ class Release
         return $this->url;
     }
 
+    public function getRepository(): Repository
+    {
+        return $this->repository;
+    }
+
     public function getPublishedDate(): \DateTimeImmutable
     {
         return $this->publishedDate;
@@ -67,7 +69,7 @@ class Release
     {
         return [
             'id'            => $this->id,
-            'repositoryId'  => $this->repositoryId,
+            'repository'    => $this->repository,
             'name'          => $this->name,
             'body'          => $this->body,
             'url'           => $this->url,
