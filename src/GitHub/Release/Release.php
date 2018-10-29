@@ -69,11 +69,11 @@ class Release
     {
         return [
             'id'            => $this->id,
-            'repository'    => $this->repository,
+            'repository'    => $this->repository->toArray(),
             'name'          => $this->name,
             'body'          => $this->body,
             'url'           => $this->url,
-            'publishedDate' => $this->publishedDate,
+            'publishedDate' => $this->publishedDate->format('U'),
         ];
     }
 }

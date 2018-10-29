@@ -33,7 +33,7 @@ $texts = [
     'feed.edit.administrators.add.title'                    => 'Add administrator',
     'feed.edit.administrators.add.form.search.placeholder'  => 'GitHub username or profile URL',
     'feed.edit.administrators.table.noResults'              => 'There are no administrators for this feed',
-    'feed.edit.contents.title'                              => 'Content of the feed',
+    'feed.edit.contents.title'                              => 'Live preview of the feed',
 
     'feed.administrators.search.results.title'              => 'Found users',
     'feed.administrators.search.results.submit'             => 'Add administrator(s)',

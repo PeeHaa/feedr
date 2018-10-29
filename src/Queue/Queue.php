@@ -56,7 +56,9 @@ class Queue
                     return;
                 }
 
-                yield $this->processTask(RepositoryEntity::createFromArray(json_decode($repository, true)));
+                $repositoryData = json_decode($repository, true);
+
+                yield $this->processTask(RepositoryEntity::createFromArray($repositoryData), $repositoryData['once']);
             });
         });
     }
@@ -70,14 +72,18 @@ class Queue
         });
     }
 
-    private function processTask(RepositoryEntity $repository): Promise
+    private function processTask(RepositoryEntity $repository, bool $once = false): Promise
     {
-        return call(function() use ($repository) {
+        return call(function() use ($repository, $once) {
             $releases = yield $this->apiClient->getReleasesForRepository($repository);
 
             $this->releaseStorage->storeCollection($releases);
 
             yield $this->controller->pushReleases($repository, $releases);
+
+            if ($once) {
+                return;
+            }
 
             yield $this->redisClient->pushTask($repository);
         });

@@ -2,9 +2,10 @@ import buildFormBody from "../../helpers/buildFormBody";
 import HandleAddAdministratorsModal from "./HandleAddRepositoriesModal";
 
 export default class {
-    constructor(form) {
+    constructor(form, livePreview) {
         this.running      = false;
         this.form         = document.querySelector('.searchRepositories');
+        this.livePreview  = livePreview;
         this.submitButton = this.form.querySelector('button i');
 
         this.form.addEventListener('submit', this.processSubmit.bind(this));
@@ -32,7 +33,7 @@ export default class {
 
         document.querySelector('body').appendChild(parsedHtml.querySelector('.modal'));
 
-        new HandleAddAdministratorsModal(document.querySelector('.modal')).show();
+        new HandleAddAdministratorsModal(document.querySelector('.modal'), this.livePreview).show();
 
         this.enableSubmitButton();
     }

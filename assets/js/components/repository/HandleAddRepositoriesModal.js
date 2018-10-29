@@ -1,9 +1,10 @@
 import buildFormBody from "../../helpers/buildFormBody";
 
 export default class {
-    constructor(modal) {
-        this.modal = modal;
-        this.form  = this.modal.querySelector('form');
+    constructor(modal, livePreview) {
+        this.modal       = modal;
+        this.livePreview = livePreview;
+        this.form        = this.modal.querySelector('form');
 
         this.modal.addEventListener('click', (event) => {
             if ('dismiss' in event.target.dataset === false) {
@@ -64,6 +65,8 @@ export default class {
 
         Object.keys(repositories).forEach((key) => {
             this.insertNewRepository(repositories[key]);
+
+            this.livePreview.subscribeNewRepository(repositories[key].fullName);
         });
 
         document.querySelector('form.searchRepositories input[name="query"]').value = '';

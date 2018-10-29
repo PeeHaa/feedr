@@ -112,20 +112,11 @@
                     <h5><?= $this->translate('feed.edit.contents.title'); ?></h5>
                 </div>
                 <div class="panel-body live-preview">
-                    <div class="media">
-                        <img src="https://avatars0.githubusercontent.com/u/1330296?v=4" alt="avatar" class="mr3">
-                        <div class="media-body">
-                            <h5 class="mt-0"><a href="https://github.com/PeeHaa/feedr" target="_blank">Peehaa/feedr</a></h5>
-                            <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                        </div>
-                    </div>
-                    <div class="media">
-                        <img src="https://avatars0.githubusercontent.com/u/1330296?v=4" alt="avatar" class="mr3">
-                        <div class="media-body">
-                            <h5 class="mt-0"><a href="https://github.com/PeeHaa/feedr" target="_blank">Peehaa/feedr</a></h5>
-                            <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                        </div>
-                    </div>
+                    <?php foreach ($feed->getReleases() as $release) { ?>
+                        <?= $this->render('/feed/release.phtml', [
+                            'release' => $release,
+                        ]); ?>
+                    <?php } ?>
                 </div>
             </div>
         </div>

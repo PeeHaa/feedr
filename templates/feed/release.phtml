@@ -1,0 +1,15 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\GitHub\Release\Release $release */ ?>
+<div class="media" data-id="<?= $release->getId(); ?>" data-timestamp="<?= $release->getPublishedDate()->format('U'); ?>">
+    <img src="<?= $this->escape($release->getRepository()->getOwner()->getAvatarUrl()); ?>" alt="avatar" class="mr3">
+    <div class="media-body">
+        <h5 class="mt-0">
+            <a href="<?= $this->escape($release->getUrl()); ?>" target="_blank">
+                <?= $this->escape($release->getRepository()->getFullName()); ?>
+                -
+                <?= $this->escape($release->getName()); ?>
+            </a>
+        </h5>
+        <p><?= $this->escape($release->getBody()); ?></p>
+    </div>
+</div>

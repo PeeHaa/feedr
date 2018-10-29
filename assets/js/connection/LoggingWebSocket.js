@@ -29,6 +29,7 @@ export default class {
         console.log('[ws] %c← %c ' + message, 'color: green', 'color: auto');
     }
 
+
     outgoing(message) {
         console.log('[ws] %c→ %c ' + message, 'color: red', 'color: auto');
     }

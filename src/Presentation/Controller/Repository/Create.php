@@ -49,6 +49,8 @@ class Create
 
             if ($needsToBeEnqueued) {
                 wait($redisClient->pushTaskToFront($repository));
+            } else {
+                wait($redisClient->pushTaskToFrontOnce($repository));
             }
         }
 

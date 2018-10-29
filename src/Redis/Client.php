@@ -31,12 +31,17 @@ class Client
 
     public function pushTask(Repository $repository): Promise
     {
-        return $this->client->query('RPUSH', $this->buildKey('repository'), json_encode($repository->toArray()));
+        return $this->client->query('RPUSH', $this->buildKey('repository'), json_encode($repository->toArray() + ['once' => false]));
     }
 
     public function pushTaskToFront(Repository $repository): Promise
     {
-        return $this->client->query('LPUSH', $this->buildKey('repository'), json_encode($repository->toArray()));
+        return $this->client->query('LPUSH', $this->buildKey('repository'), json_encode($repository->toArray() + ['once' => false]));
+    }
+
+    public function pushTaskToFrontOnce(Repository $repository): Promise
+    {
+        return $this->client->query('LPUSH', $this->buildKey('repository'), json_encode($repository->toArray() + ['once' => true]));
     }
 
     public function popTask(): Promise

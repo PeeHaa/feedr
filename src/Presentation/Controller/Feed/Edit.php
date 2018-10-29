@@ -46,8 +46,8 @@ class Edit
         }
 
         $this->response->setContent($template->renderPage('/feed/edit.phtml', [
-            'feed'       => $storage->getById((int) $id),
-            'searchForm' => $searchForm,
+            'feed'         => $storage->getById((int) $id),
+            'searchForm'   => $searchForm,
         ]));
 
         return $this->response;
