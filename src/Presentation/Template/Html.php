@@ -6,6 +6,7 @@ use CodeCollab\I18n\Translator;
 use CodeCollab\CsrfToken\Token;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Router\UrlBuilder;
+use PeeHaa\AwesomeFeed\WebSocket\Configuration;
 
 class Html
 {
@@ -21,6 +22,8 @@ class Html
 
     private $gateKeeper;
 
+    private $webSocketConfiguration;
+
     private $_variables;
 
     public function __construct(
@@ -29,15 +32,17 @@ class Html
         Translator $translator,
         Token $csrfToken,
         UrlBuilder $urlBuilder,
-        GateKeeper $gateKeeper
+        GateKeeper $gateKeeper,
+        Configuration $webSocketConfiguration
     )
     {
-        $this->basePage     = $basePage;
-        $this->templatePath = $templatePath;
-        $this->translator   = $translator;
-        $this->csrfToken    = $csrfToken;
-        $this->urlBuilder   = $urlBuilder;
-        $this->gateKeeper   = $gateKeeper;
+        $this->basePage               = $basePage;
+        $this->templatePath           = $templatePath;
+        $this->translator             = $translator;
+        $this->csrfToken              = $csrfToken;
+        $this->urlBuilder             = $urlBuilder;
+        $this->gateKeeper             = $gateKeeper;
+        $this->webSocketConfiguration = $webSocketConfiguration;
     }
 
     public function render(string $template, array $data = []): string

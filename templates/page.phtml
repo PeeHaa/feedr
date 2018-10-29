@@ -16,7 +16,7 @@
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="theme-color" content="#ffffff">
     </head>
-    <body>
+    <body data-websocket="<?= $this->escape((string) $this->webSocketConfiguration); ?>">
         <?php if ($this->gateKeeper->isAuthorized()) { ?>
             <?= $this->render('/layout/header.phtml'); ?>
         <?php } ?>

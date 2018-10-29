@@ -9,11 +9,15 @@
             "email": "info@pieterhordijk.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": "^7.2",
         "amphp/artax": "^3.0",
+        "amphp/http-server-router": "^1.0",
+        "amphp/log": "^1.0",
         "amphp/redis": "^0.3.3",
+        "amphp/websocket-server": "dev-master",
         "cocur/slugify": "^3.1",
         "codecollab/form": "^1.0",
         "codecollab/http": "^1.3",

@@ -9,6 +9,7 @@ use PeeHaa\AwesomeFeed\Redis\Client as RedisClient;
 use PeeHaa\AwesomeFeed\Storage\GitHub\Repository as RepositoryApi;
 use PeeHaa\AwesomeFeed\Storage\Postgres\Release as ReleaseStorage;
 use PeeHaa\AwesomeFeed\Storage\Postgres\Repository as RepositoryStorage;
+use PeeHaa\AwesomeFeed\WebSocket\Controller;
 use function Amp\call;
 
 class Queue
@@ -21,6 +22,8 @@ class Queue
 
     private $apiClient;
 
+    private $controller;
+
     private $frequency;
 
     public function __construct(
@@ -28,6 +31,7 @@ class Queue
         RepositoryStorage $repositoryStorage,
         ReleaseStorage $releaseStorage,
         RepositoryApi $apiClient,
+        Controller $controller,
         int $frequencyInSeconds = 2
     )
     {
@@ -35,6 +39,7 @@ class Queue
         $this->repositoryStorage = $repositoryStorage;
         $this->releaseStorage    = $releaseStorage;
         $this->apiClient         = $apiClient;
+        $this->controller        = $controller;
         $this->frequency         = $frequencyInSeconds * 1000;
     }
 
@@ -71,6 +76,8 @@ class Queue
             $releases = yield $this->apiClient->getReleasesForRepository($repository);
 
             $this->releaseStorage->storeCollection($releases);
+
+            yield $this->controller->pushReleases($repository, $releases);
 
             yield $this->redisClient->pushTask($repository);
         });

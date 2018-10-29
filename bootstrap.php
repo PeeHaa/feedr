@@ -37,6 +37,7 @@ use PeeHaa\AwesomeFeed\Router\Manager as RouteManager;
 use PeeHaa\AwesomeFeed\Router\Router;
 use PeeHaa\AwesomeFeed\Router\UrlBuilder;
 use PeeHaa\AwesomeFeed\Storage\TokenSession;
+use PeeHaa\AwesomeFeed\WebSocket\Configuration;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
@@ -91,6 +92,14 @@ $auryn->define(AccessToken::class, [
  */
 $auryn->define(RedisClient::class, [
     ':uri' => sprintf('tcp://%s:%s', $configuration['redis']['host'], $configuration['redis']['port']),
+]);
+
+/**
+ * Set up websocket configuration
+ */
+$auryn->share(Configuration::class);
+$auryn->define(Configuration::class, [
+    ':configuration' => $configuration,
 ]);
 
 /**
