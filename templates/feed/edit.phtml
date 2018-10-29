@@ -59,10 +59,12 @@
                                         </tr>
                                     <?php } else { ?>
                                         <?php foreach ($feed->getRepositories() as $repository) { ?>
-                                            <tr>
+                                            <tr data-id="<?= $repository->getId(); ?>">
                                                 <td><?= $this->escape($repository->getFullName()); ?></td>
                                                 <td class="actions">
-                                                    <button class="btn btn-danger">D</button>
+                                                    <a href="<?= $this->url('deleteRepositoryConfirmation', ['id' => $feed->getId(), 'slug' => $feed->getSlug(), 'repositoryId' => $repository->getId()]); ?>" class="btn btn-danger delete-repository">
+                                                        <i class="icon-cross"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -88,12 +90,14 @@
                                         </tr>
                                     <?php } else { ?>
                                         <?php foreach ($feed->getAdministrators() as $administrator) { ?>
-                                            <tr>
+                                            <tr data-id="<?= $administrator->getId(); ?>">
                                                 <td class="avatar"><img src="<?= $this->escape($administrator->getAvatarUrl()); ?>" alt="avatar"></td>
                                                 <td><?= $this->escape($administrator->getUsername()); ?></td>
                                                 <td class="actions">
                                                     <?php if ($feed->getCreatedBy()->getId() !== $administrator->getId()) { ?>
-                                                        <button class="btn btn-danger">D</button>
+                                                        <a href="<?= $this->url('deleteAdministratorConfirmation', ['id' => $feed->getId(), 'slug' => $feed->getSlug(), 'userId' => $administrator->getId()]); ?>" class="btn btn-danger delete-administrator">
+                                                            <i class="icon-cross"></i>
+                                                        </a>
                                                     <?php } ?>
                                                 </td>
                                             </tr>

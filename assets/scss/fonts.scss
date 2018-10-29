@@ -38,8 +38,13 @@
     to {transform: rotate(360deg);}
 }
 
+.icon-pencil {
+    height: 24px;
+}
+
 .icon-pencil:before {
     content: "\e905";
+    line-height: 38px;
 }
 
 .icon-spinner2:before {
@@ -55,8 +60,13 @@
     content: "\e994";
 }
 
+.icon-cross {
+    height: 24px;
+}
+
 .icon-cross:before {
     content: "\ea0f";
+    line-height: 38px;
 }
 
 .icon-checkmark:before {

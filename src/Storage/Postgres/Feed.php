@@ -68,6 +68,21 @@ class Feed
         ]);
     }
 
+    public function deleteAdmin(Entity $feed, User $user): void
+    {
+        $query = '
+            DELETE FROM feed_admins
+            WHERE feed_id = :feed_id
+              AND user_id = :user_id
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute([
+            'feed_id' => $feed->getId(),
+            'user_id' => $user->getId(),
+        ]);
+    }
+
     public function addRepositories(int $feedId, RepositoryCollection $repositories): void
     {
         foreach ($repositories as $repository) {
@@ -314,5 +329,56 @@ class Feed
         }
 
         return $releases;
+    }
+
+    public function deleteFeed(Entity $feed): void
+    {
+        $query = '
+            DELETE FROM feeds
+            WHERE id = :id
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute([
+            'id' => $feed->getId(),
+        ]);
+    }
+
+    public function deleteRepository(Entity $feed, Repository $repository): void
+    {
+        $query = '
+            DELETE FROM feeds_repositories
+            WHERE feed_id = :feed_id
+              AND repository_id = :repository_id
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute([
+            'feed_id'       => $feed->getId(),
+            'repository_id' => $repository->getId(),
+        ]);
+
+        $query = '
+            SELECT COUNT(id)
+            FROM feeds_repositories
+            WHERE feeds_repositories.repository_id = :repository_id
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute([
+            'repository_id' => $repository->getId(),
+        ]);
+
+        if ($stmt->fetchColumn(0) === 0) {
+            $query = '
+                DELETE FROM repositories
+                WHERE id = :id
+            ';
+
+            $stmt = $this->dbConnection->prepare($query);
+            $stmt->execute([
+                'id' => $repository->getId(),
+            ]);
+        }
     }
 }

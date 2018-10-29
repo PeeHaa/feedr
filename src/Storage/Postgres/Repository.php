@@ -117,4 +117,31 @@ class Repository
 
         return $collection;
     }
+
+    public function getById(int $id): ?RepositoryInfo
+    {
+        $query = '
+            SELECT repositories.id AS repository_id, repositories.name AS repository_name,
+              repositories.full_name AS repository_full_name, repositories.url AS repository_url,
+              users.id AS user_id, users.username AS user_username, users.url AS user_url, users.avatar AS user_avatar
+            FROM repositories
+            JOIN users ON users.id = repositories.owner_id
+            where repositories.id = :id
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute([
+            'id' => $id,
+        ]);
+
+        $record = $stmt->fetch();
+
+        return new RepositoryInfo(
+            $record['repository_id'],
+            $record['repository_name'],
+            $record['repository_full_name'],
+            $record['repository_url'],
+            new User($record['user_id'], $record['user_username'], $record['user_url'], $record['user_avatar'])
+        );
+    }
 }

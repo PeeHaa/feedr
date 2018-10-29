@@ -1,6 +1,6 @@
 <?php declare(strict_types=1); ?>
 <?php /** @var \PeeHaa\AwesomeFeed\GitHub\Release\Release $release */ ?>
-<div class="media" data-id="<?= $release->getId(); ?>" data-timestamp="<?= $release->getPublishedDate()->format('U'); ?>">
+<div class="media" data-repository="<?= $this->escape($release->getRepository()->getFullName()); ?>" data-id="<?= $release->getId(); ?>" data-timestamp="<?= $release->getPublishedDate()->format('U'); ?>">
     <img src="<?= $this->escape($release->getRepository()->getOwner()->getAvatarUrl()); ?>" alt="avatar" class="mr3">
     <div class="media-body">
         <h5 class="mt-0">

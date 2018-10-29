@@ -4,7 +4,9 @@ namespace PeeHaa\AwesomeFeed\Presentation\Controller\Repository;
 
 use CodeCollab\Http\Request\Request;
 use CodeCollab\Http\Response\Response;
+use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Form\Repository\Create as Form;
+use PeeHaa\AwesomeFeed\Presentation\Controller\Error;
 use PeeHaa\AwesomeFeed\Redis\Client as RedisClient;
 use PeeHaa\AwesomeFeed\Storage\GitHub\Repository as GitHubApi;
 use PeeHaa\AwesomeFeed\Storage\Postgres\Feed as FeedStorage;
@@ -29,6 +31,7 @@ class Create
         RepositoryStorage $repositoryStorage,
         GitHubApi $gitHubStorage,
         RedisClient $redisClient,
+        GateKeeper $gateKeeper,
         string $id
     ): Response {
         $form->bindRequest($request);
@@ -36,6 +39,12 @@ class Create
 
         if (!$form->isValid() || !$request->post('repository')) {
             return $this->response;
+        }
+
+        $feed = $storage->getById((int) $id);
+
+        if ($feed === null || !$feed->hasUserAccess($gateKeeper->getUser())) {
+            return (new Error($this->response))->notFound();
         }
 
         $repositories = $gitHubStorage->getRepositoriesByIdentifiers(...$request->post('repository'));
@@ -56,7 +65,10 @@ class Create
 
         $storage->addRepositories((int) $id, $repositories);
 
-        $this->response->setContent(json_encode($repositories->toArray()));
+        $this->response->setContent(json_encode([
+            'repositories' => $repositories->toArray(),
+            'feed'         => $feed->toArray(),
+        ]));
 
         return $this->response;
     }

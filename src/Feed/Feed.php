@@ -87,4 +87,17 @@ class Feed
     {
         return $this->releases;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id'             => $this->id,
+            'name'           => $this->name,
+            'slug'           => $this->slug,
+            'createdBy'      => $this->createdBy->toArray(),
+            'administrators' => $this->administrators->toArray(),
+            'repositories'   => $this->repositories->toArray(),
+            'releases'       => $this->releases->toArray(),
+        ];
+    }
 }

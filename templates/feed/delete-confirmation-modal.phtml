@@ -1,0 +1,25 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Feed\Delete $deleteForm */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Feed\Feed $feed */ ?>
+<div class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?= $this->translate('feed.delete.confirmation.title'); ?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="<?= $this->url('deleteFeed', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" method="post">
+                <input type="hidden" name="csrfToken" value="<?= $deleteForm['csrfToken']->getValue(); ?>">
+                <div class="modal-body">
+                    <p><?= $this->translate('feed.delete.confirmation.message.%', [$this->escape($feed->getName())]); ?></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $this->translate('feed.delete.button.cancel'); ?></button>
+                    <button type="submit" class="btn btn-danger"><?= $this->translate('feed.delete.submit'); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

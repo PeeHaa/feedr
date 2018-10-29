@@ -5,13 +5,12 @@ namespace PeeHaa\AwesomeFeed\Presentation\Controller\Administrator;
 use CodeCollab\Http\Request\Request;
 use CodeCollab\Http\Response\Response;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
-use PeeHaa\AwesomeFeed\Form\Administrator\Create as Form;
+use PeeHaa\AwesomeFeed\Form\Administrator\Delete as Form;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Error;
-use PeeHaa\AwesomeFeed\Storage\GitHub\User as GitHubApi;
 use PeeHaa\AwesomeFeed\Storage\Postgres\Feed as FeedStorage;
 use PeeHaa\AwesomeFeed\Storage\Postgres\User as UserStorage;
 
-class Create
+class Delete
 {
     private $response;
 
@@ -23,34 +22,32 @@ class Create
     public function process(
         Request $request,
         Form $form,
-        FeedStorage $storage,
+        FeedStorage $feedStorage,
         UserStorage $userStorage,
-        GitHubApi $gitHubStorage,
         GateKeeper $gateKeeper,
-        string $id
+        string $feedId,
+        string $feedSlug,
+        string $userId
     ): Response {
         $form->bindRequest($request);
         $form->validate();
 
-        if (!$form->isValid() || !$request->post('user')) {
+        if (!$form->isValid()) {
             return $this->response;
         }
 
-        $feed = $storage->getById((int) $id);
+        $feed = $feedStorage->getById((int) $feedId);
+        $user = $userStorage->getById((int) $userId);
 
         if ($feed === null || !$feed->hasUserAccess($gateKeeper->getUser())) {
             return (new Error($this->response))->notFound();
         }
 
-        $users = $gitHubStorage->getUsersByUsernames(...$request->post('user'));
-
-        $userStorage->storeCollection($users);
-
-        $storage->addAdmins((int) $id, $users);
+        $feedStorage->deleteAdmin($feed, $user);
 
         $this->response->setContent(json_encode([
-            'administrators' => $users->toArray(),
-            'feed'           => $feed->toArray(),
+            'id'         => $user->getId(),
+            'selfDelete' => $user === $gateKeeper->getUser()->getId(),
         ]));
 
         return $this->response;

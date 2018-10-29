@@ -84,4 +84,22 @@ class User
             'avatar'   => $user->getAvatarUrl(),
         ]);
     }
+
+    public function getById(int $id): ?UserInfo
+    {
+        $query = '
+            SELECT id, username, url, avatar
+            FROM users
+            WHERE id = :id
+        ';
+
+        $stmt = $this->dbConnection->prepare($query);
+        $stmt->execute([
+            'id' => $id,
+        ]);
+
+        $record = $stmt->fetch();
+
+        return new UserInfo($record['id'], $record['username'], $record['url'], $record['avatar']);
+    }
 }

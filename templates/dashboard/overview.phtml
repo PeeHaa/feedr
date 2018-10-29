@@ -10,8 +10,8 @@
                 <th><?= $this->translate('feed.overview.table.name'); ?></th>
                 <th><?= $this->translate('feed.overview.table.createdBy'); ?></th>
                 <th><?= $this->translate('feed.overview.table.url'); ?></th>
-                <th class="served"><?= $this->translate('feed.overview.table.served'); ?></th>
-                <th class="clicks"><?= $this->translate('feed.overview.table.clicks'); ?></th>
+                <th class="repositories"><?= $this->translate('feed.overview.table.repositories'); ?></th>
+                <th class="releases"><?= $this->translate('feed.overview.table.releases'); ?></th>
                 <th class="actions">&nbsp;</th>
             </tr>
             <?php if (!count($overview)) { ?>
@@ -20,7 +20,7 @@
                 </tr>
             <?php } else { ?>
                 <?php foreach ($overview as $feed) { ?>
-                    <tr>
+                    <tr data-id="<?= $feed->getId(); ?>">
                         <td><?= $this->escape($feed->getName()); ?></td>
                         <td>
                             <a href="<?= $this->escape($feed->getCreatedBy()->getUrl()); ?>" target="_blank">
@@ -28,12 +28,16 @@
                             </a>
                         </td>
                         <td><a href="<?= $this->escape($feed->getSlug()); ?>" target="_blank"><?= $this->escape($feed->getSlug()); ?></a></td>
-                        <td class="served">12000</td>
-                        <td class="clicks">1231546515</td>
-                        <td>
-                            <a href="<?= $this->escape($this->url('editFeed', ['id' => $feed->getId(), 'slug' => $feed->getSlug()])); ?>" class="btn btn-primary">E</a>
-                            <button class="btn btn-danger">D</button>
-                        </td class="actions">
+                        <td class="repositories"><?= count($feed->getRepositories()); ?></td>
+                        <td class="releases"><?= count($feed->getReleases()); ?></td>
+                        <td class="actions">
+                            <a href="<?= $this->escape($this->url('editFeed', ['id' => $feed->getId(), 'slug' => $feed->getSlug()])); ?>" class="btn btn-primary">
+                                <i class="icon-pencil"></i>
+                            </a>
+                            <a href="<?= $this->escape($this->url('deleteFeedConfirmation', ['id' => $feed->getId(), 'slug' => $feed->getSlug()])); ?>" class="btn btn-danger delete-feed">
+                                <i class="icon-cross"></i>
+                            </a>
+                        </td>
                     </tr>
                 <?php } ?>
             <?php } ?>

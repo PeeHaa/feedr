@@ -23,6 +23,20 @@ export default class {
         this.websocket.subscribeToChannel(name);
     }
 
+    unsubscribeFromRepository(name) {
+        this.websocket.unsubscribeFromChannel(name);
+
+        const media = this.previewPanel.querySelectorAll('.media');
+
+        for (let i = 0; i < media.length; i++) {
+            let release = media[i];
+
+            if (release.dataset.repository === name) {
+                this.previewPanel.removeChild(release);
+            }
+        }
+    }
+
     processNewReleases(message) {
         if (message.command !== 'newReleases') {
             return;
@@ -69,8 +83,9 @@ export default class {
         const content      = document.createElement('p');
 
         mediaElement.classList.add('media');
-        mediaElement.dataset.id        = release.id;
-        mediaElement.dataset.timestamp = release.publishedDate;
+        mediaElement.dataset.repository = release.repository.fullName;
+        mediaElement.dataset.id         = release.id;
+        mediaElement.dataset.timestamp  = release.publishedDate;
 
         avatar.classList.add('mr3');
         avatar.setAttribute('src', release.repository.owner.avatarUrl);

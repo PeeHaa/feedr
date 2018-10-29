@@ -1,0 +1,26 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Form\Administrator\Delete $deleteForm */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Feed\Feed $feed */ ?>
+<?php /** @var \PeeHaa\AwesomeFeed\GitHub\Repository $repository */ ?>
+<div class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><?= $this->translate('feed.edit.repositories.delete.title'); ?></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="<?= $this->url('deleteRepository', ['id' => $feed->getId(), 'slug' => $feed->getSlug(), 'repositoryId' => $repository->getId()]); ?>" method="post">
+                <input type="hidden" name="csrfToken" value="<?= $deleteForm['csrfToken']->getValue(); ?>">
+                <div class="modal-body">
+                    <p><?= $this->translate('feed.edit.repositories.delete.confirmation.message.%', [$this->escape($repository->getFullName())]); ?></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $this->translate('feed.edit.repositories.delete.button.cancel'); ?></button>
+                    <button type="submit" class="btn btn-danger"><?= $this->translate('feed.edit.repositories.delete.submit'); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

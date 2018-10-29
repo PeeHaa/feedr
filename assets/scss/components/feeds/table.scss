@@ -4,6 +4,14 @@
     }
 
     &.feeds {
+        .repositories {
+            text-align: right;
+        }
+
+        .releases {
+            text-align: right;
+        }
+
         .served {
             text-align: right;
         }
@@ -13,7 +21,7 @@
         }
 
         .actions {
-            width:100px;
+            width: 112px;
             text-align: right;
         }
     }

@@ -61,12 +61,12 @@ export default class {
     }
 
     processSuccessfulRequest(response) {
-        const repositories = JSON.parse(response.target.responseText);
+        const result = JSON.parse(response.target.responseText);
 
-        Object.keys(repositories).forEach((key) => {
-            this.insertNewRepository(repositories[key]);
+        Object.keys(result.repositories).forEach((key) => {
+            this.insertNewRepository(result.repositories[key], result.feed);
 
-            this.livePreview.subscribeNewRepository(repositories[key].fullName);
+            this.livePreview.subscribeNewRepository(result.repositories[key].fullName);
         });
 
         document.querySelector('form.searchRepositories input[name="query"]').value = '';
@@ -78,7 +78,7 @@ export default class {
         this.close();
     }
 
-    insertNewRepository(repository) {
+    insertNewRepository(repository, feed) {
         const noResultsRow = document.querySelector('table.repositories tr td[colspan="2"]');
 
         if (noResultsRow) {
@@ -92,15 +92,15 @@ export default class {
                 continue;
             }
 
-            rows[i].parentNode.insertBefore(this.buildNewRepositoryRow(repository), rows[i]);
+            rows[i].parentNode.insertBefore(this.buildNewRepositoryRow(repository, feed), rows[i]);
 
             return;
         }
 
-        document.querySelector('table.repositories tbody').appendChild(this.buildNewRepositoryRow(repository));
+        document.querySelector('table.repositories tbody').appendChild(this.buildNewRepositoryRow(repository, feed));
     }
 
-    buildNewRepositoryRow(repository) {
+    buildNewRepositoryRow(repository, feed) {
         const row = document.createElement('tr');
 
         const nameColumn = document.createElement('td');
@@ -108,13 +108,21 @@ export default class {
 
         actionsColumn.classList.add('actions');
 
-        const deleteButton = document.createElement('button');
+        const deleteButton = document.createElement('a');
 
-        deleteButton.classList.add('btn', 'btn-danger');
-        deleteButton.textContent = 'D';
+        deleteButton.classList.add('btn', 'btn-danger', 'delete-repository');
+        deleteButton.setAttribute('href', '/feeds/' + feed.id + '/' + feed.slug + '/repositories/' + repository.id + '/delete');
+
+        const deleteButtonIcon = document.createElement('i');
+
+        deleteButtonIcon.classList.add('icon-cross');
+
+        deleteButton.appendChild(deleteButtonIcon);
 
         nameColumn.textContent = repository.fullName;
         actionsColumn.appendChild(deleteButton);
+
+        row.dataset.id = repository.id;
 
         row.appendChild(nameColumn);
         row.appendChild(actionsColumn);

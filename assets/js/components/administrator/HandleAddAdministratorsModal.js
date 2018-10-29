@@ -60,10 +60,10 @@ export default class {
     }
 
     processSuccessfulRequest(response) {
-        const administrators = JSON.parse(response.target.responseText);
+        const result = JSON.parse(response.target.responseText);
 
-        Object.keys(administrators).forEach((key) => {
-            this.insertNewAdministrator(administrators[key]);
+        Object.keys(result.administrators).forEach((key) => {
+            this.insertNewAdministrator(result.administrators[key], result.feed);
         });
 
         document.querySelector('form.searchUsers input[name="query"]').value = '';
@@ -75,7 +75,7 @@ export default class {
         this.close();
     }
 
-    insertNewAdministrator(administrator) {
+    insertNewAdministrator(administrator, feed) {
         const rows = document.querySelectorAll('table.administrators tr');
 
         for (let i = 0; i < rows.length; i++) {
@@ -83,15 +83,15 @@ export default class {
                 continue;
             }
 
-            rows[i].parentNode.insertBefore(this.buildNewAdministratorRow(administrator), rows[i]);
+            rows[i].parentNode.insertBefore(this.buildNewAdministratorRow(administrator, feed), rows[i]);
 
             return;
         }
 
-        document.querySelector('table.administrators tbody').appendChild(this.buildNewAdministratorRow(administrator));
+        document.querySelector('table.administrators tbody').appendChild(this.buildNewAdministratorRow(administrator, feed));
     }
 
-    buildNewAdministratorRow(administrator) {
+    buildNewAdministratorRow(administrator, feed) {
         const row = document.createElement('tr');
 
         const avatarColumn   = document.createElement('td');
@@ -102,12 +102,18 @@ export default class {
         actionsColumn.classList.add('actions');
 
         const avatar       = document.createElement('img');
-        const deleteButton = document.createElement('button');
+        const deleteButton = document.createElement('a');
 
         avatar.src = administrator.avatarUrl;
 
-        deleteButton.classList.add('btn', 'btn-danger');
-        deleteButton.textContent = 'D';
+        deleteButton.classList.add('btn', 'btn-danger', 'delete-administrator');
+        deleteButton.setAttribute('href', '/feeds/' + feed.id + '/' + feed.slug + '/administrators/' + administrator.id + '/delete');
+
+        const deleteButtonIcon = document.createElement('i');
+
+        deleteButtonIcon.classList.add('icon-cross');
+
+        deleteButton.appendChild(deleteButtonIcon);
 
         avatarColumn.appendChild(avatar);
         usernameColumn.textContent = administrator.username;
