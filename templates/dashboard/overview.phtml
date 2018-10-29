@@ -27,7 +27,7 @@
                                 <?= $this->escape($feed->getCreatedBy()->getUsername()); ?>
                             </a>
                         </td>
-                        <td><a href="<?= $this->escape($feed->getSlug()); ?>" target="_blank"><?= $this->escape($feed->getSlug()); ?></a></td>
+                        <td><a href="<?= $this->url('rss', ['id' => $feed->getId(), 'slug' => $feed->getSlug()]); ?>" target="_blank"><?= $this->escape($feed->getSlug()); ?></a></td>
                         <td class="repositories"><?= count($feed->getRepositories()); ?></td>
                         <td class="releases"><?= count($feed->getReleases()); ?></td>
                         <td class="actions">

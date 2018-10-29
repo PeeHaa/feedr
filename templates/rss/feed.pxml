@@ -1,0 +1,30 @@
+<?php declare(strict_types=1); ?>
+<?php /** @var \PeeHaa\AwesomeFeed\Feed\Feed $feed */ ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id><?= $feed->getId(); ?></id>
+    <title><?= $this->escape($feed->getName()); ?></title>
+    <author>
+        <name>Feedr</name>
+        <uri>https://feedr.pieterhordijk.com</uri>
+    </author>
+    <link rel="self" href="<?= $feed->getId(); ?>" type="application/atom+xml"/>
+    <generator uri="https://github.com/Room-11/Feedr" version="1.0">
+        Feedr
+    </generator>
+    <icon>https://feedr.pieterhordijk.com/images/github_icon.png</icon>
+    <?php foreach ($feed->getReleases() as $release) { ?>
+        <entry>
+            <id><?= $this->escape($release->getUrl()); ?></id>
+            <title><?= $this->escape($release->getRepository()->getFullName()) . ' - ' . $this->escape($release->getName()); ?></title>
+            <updated><?= $release->getPublishedDate()->format('Y-m-d') . 'T' . $release->getPublishedDate()->format('H:i:s') . 'Z'; ?></updated>
+            <author>
+                <name><?= $this->escape($release->getRepository()->getOwner()->getUsername()); ?></name>
+                <uri><?= $this->escape($release->getRepository()->getOwner()->getUrl()); ?></uri>
+            </author>
+            <content><?= $this->escape($release->getBody()); ?></content>
+            <link rel="alternate" href="<?= $this->escape($release->getUrl()); ?>"/>
+            <summary><?= $this->escape($release->getBody()); ?></summary>
+            <published><?= $release->getPublishedDate()->format('Y-m-d') . 'T' . $release->getPublishedDate()->format('H:i:s') . 'Z'; ?></published>
+        </entry>
+    <?php } ?>
+</feed>

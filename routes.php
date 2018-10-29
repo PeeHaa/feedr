@@ -20,6 +20,7 @@ use PeeHaa\AwesomeFeed\Presentation\Controller\Repository\Create as CreateReposi
 use PeeHaa\AwesomeFeed\Presentation\Controller\Repository\Delete as DeleteRepository;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Repository\DeleteConfirmation as DeleteRepositoryConfirmation;
 use PeeHaa\AwesomeFeed\Presentation\Controller\Repository\Search as SearchRepository;
+use PeeHaa\AwesomeFeed\Presentation\Controller\Rss\Feed;
 use PeeHaa\AwesomeFeed\Router\Manager as RouteManager;
 
 /** @var Injector $auryn */
@@ -28,6 +29,8 @@ $router     = $auryn->make(RouteManager::class);
 
 $router->get('renderNotFound', '/not-found', [Error::class, 'notFound']);
 $router->get('renderMethodNotAllowed', '/method-not-allowed', [Error::class, 'methodNotAllowed']);
+
+$router->get('rss', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}', [Feed::class, 'render']);
 
 if (!$gateKeeper->isAuthorized()) {
     $router->get('home', '/', [LogIn::class, 'render']);

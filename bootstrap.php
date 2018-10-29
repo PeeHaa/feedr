@@ -32,6 +32,7 @@ use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\GitHub\AccessToken;
 use PeeHaa\AwesomeFeed\GitHub\Credentials;
 use PeeHaa\AwesomeFeed\Presentation\Template\Html;
+use PeeHaa\AwesomeFeed\Presentation\Template\Xml;
 use PeeHaa\AwesomeFeed\Router\FrontController;
 use PeeHaa\AwesomeFeed\Router\Manager as RouteManager;
 use PeeHaa\AwesomeFeed\Router\Router;
@@ -228,6 +229,10 @@ $auryn->define(FileTranslator::class, [
 $auryn->share(Html::class);
 $auryn->define(Html::class, [
     ':basePage'     => '/page.phtml',
+    ':templatePath' => __DIR__ . '/templates',
+]);
+$auryn->share(Xml::class);
+$auryn->define(Xml::class, [
     ':templatePath' => __DIR__ . '/templates',
 ]);
 
