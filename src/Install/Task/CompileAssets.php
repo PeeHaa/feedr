@@ -26,7 +26,7 @@ class CompileAssets implements Task
     {
         $output->info('Installing node modules');
 
-        $process = proc_open('npm run install', [['pipe', 'r'], ['pipe', 'w'], ['pipe', 'w']], $pipes, $this->basePath);
+        $process = proc_open('npm install', [['pipe', 'r'], ['pipe', 'w'], ['pipe', 'w']], $pipes, $this->basePath);
 
         $exitCode = proc_close($process);
 
