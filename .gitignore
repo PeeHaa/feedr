@@ -1,7 +1,5 @@
 /vendor/
 .idea
-config/*
-!config/config.sample.php
 public/css
 public/js
 public/fonts

@@ -40,7 +40,7 @@ class WebSocket
                 'Expose the internal address? This is to be used when not putting the websocket server behind a proxy [y]: '
             );
 
-            if ($configuration['webSocket']['expose'] === null || trim($configuration['webSocket']['internalPort']) === '' || trim($configuration['webSocket']['internalPort']) === 'y') {
+            if ($configuration['webSocket']['expose'] === null || trim($configuration['webSocket']['expose']) === '' || trim($configuration['webSocket']['expose']) === 'y') {
                 $configuration['webSocket']['expose'] = true;
             } else {
                 $configuration['webSocket']['expose'] = false;
