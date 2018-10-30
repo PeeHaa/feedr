@@ -34,7 +34,7 @@ export default class {
 
         let connectionString = 'ws';
 
-        if (window.location.protocol === 'https') {
+        if (window.location.protocol === 'https:') {
             connectionString += 's'
         }
 
