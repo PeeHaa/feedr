@@ -52,7 +52,7 @@
                             <table class="table repositories">
                                 <tbody>
                                     <?php if (!count($feed->getRepositories())) { ?>
-                                        <tr>
+                                        <tr class="no-results">
                                             <td colspan="2">
                                                 <?= $this->translate('feed.edit.repositories.table.noResults'); ?>
                                             </td>
@@ -83,7 +83,7 @@
                             <table class="table administrators">
                                 <tbody>
                                     <?php if (!count($feed->getAdministrators())) { ?>
-                                        <tr>
+                                        <tr class="no-results">
                                             <td colspan="3">
                                                 <?= $this->translate('feed.edit.administrators.table.noResults'); ?>
                                             </td>

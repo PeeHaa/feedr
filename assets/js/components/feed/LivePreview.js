@@ -15,6 +15,10 @@ export default class {
 
     subscribeExistingRepositories() {
         document.querySelectorAll('.table.repositories tr').forEach((repositoryRow) => {
+            if (repositoryRow.classList.contains('no-results')) {
+                return;
+            }
+
             this.subscribeNewRepository(repositoryRow.querySelector('td').textContent)
         });
     }
