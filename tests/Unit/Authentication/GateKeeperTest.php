@@ -4,43 +4,72 @@ namespace PeeHaa\AwesomeFeedTest\Unit\Authentication;
 
 use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GateKeeperTest extends TestCase
 {
-    /** @var MockObject|User */
-    private $user;
+    /** @var User */
+    private $user1;
+
+    /** @var User */
+    private $user2;
     
-    /** @var MockObject|GateKeeper */
+    /** @var GateKeeper */
     private $gateKeeper;
 
     public function setUp()
     {
-        $this->user = new User(13, 'TestUser', 'https://github.com/TestUser', 'https://github.com/avatar/png');
+        $this->user1 = new User(13, 'TestUser1', 'https://github.com/TestUser1', 'https://github.com/avatar1.png');
+        $this->user2 = new User(14, 'TestUser2', 'https://github.com/TestUser2', 'https://github.com/avatar2.png');
+
         $this->gateKeeper = new GateKeeper;
     }
 
-    public function testDefault()
+    public function testUnauthorizedGuest()
     {
-        $this->assertSame(false, $this->gateKeeper->isAuthorized());
+        $this->assertFalse($this->gateKeeper->isAuthorized());
     }
 
-    public function testAuthorize()
+    public function testAuthorizedUser()
     {
-        $this->gateKeeper->authorize($this->user);
-        $this->assertSame(true, $this->gateKeeper->isAuthorized());
+        $this->gateKeeper->authorize($this->user1);
+
+        $this->assertTrue($this->gateKeeper->isAuthorized());
     }
 
-    public function testgetUserWithAuthorize()
+    public function testGetUserWhenNotAuthorized()
     {
-        $this->gateKeeper->authorize($this->user);
-        $this->assertSame($this->user, $this->gateKeeper->getUser());
+        $this->assertNull($this->gateKeeper->getUser());
+    }
+
+    public function testGetUserWhenAuthorized()
+    {
+        $this->gateKeeper->authorize($this->user1);
+
+        $this->assertSame($this->user1, $this->gateKeeper->getUser());
+    }
+
+    public function testAuthorizeOverwritesPreviousUser()
+    {
+        $this->gateKeeper->authorize($this->user1);
+
+        $this->assertSame($this->user1, $this->gateKeeper->getUser());
+
+        $this->gateKeeper->authorize($this->user2);
+
+        $this->assertSame($this->user2, $this->gateKeeper->getUser());
+
+        $this->assertTrue($this->gateKeeper->isAuthorized());
     }
 
     public function testDeAuthorize()
     {
+        $this->gateKeeper->authorize($this->user1);
+
+        $this->assertTrue($this->gateKeeper->isAuthorized());
+
         $this->gateKeeper->deAuthorize();
-        $this->assertSame(false, $this->gateKeeper->isAuthorized());
+
+        $this->assertFalse($this->gateKeeper->isAuthorized());
     }
 }

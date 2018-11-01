@@ -4,34 +4,44 @@ namespace PeeHaa\AwesomeFeedTest\Unit\Authentication;
 
 use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\Authentication\Collection;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
 {
-    /** @var MockObject|User */
+    /** @var User */
     private $user1;
     
-    /** @var MockObject|User */
+    /** @var User */
     private $user2;
     
-    /** @var MockObject|User */
+    /** @var User */
     private $user3;
     
-    /** @var MockObject|Collection */
+    /** @var Collection */
     private $collection;
 
     public function setUp()
     {
-        $this->user1 = new User(13, 'TestUser1', 'https://github.com/TestUser1', 'https://github.com/avatar/png');
-        $this->user2 = new User(14, 'TestUser2', 'https://github.com/TestUser2', 'https://github.com/avatar/png');
-        $this->user3 = new User(15, 'TestUser3', 'https://github.com/TestUser3', 'https://github.com/avatar/png');
+        $this->user1 = new User(13, 'TestUser1', 'https://github.com/TestUser1', 'https://github.com/avatar1.png');
+        $this->user2 = new User(14, 'TestUser2', 'https://github.com/TestUser2', 'https://github.com/avatar2.png');
+        $this->user3 = new User(15, 'TestUser3', 'https://github.com/TestUser3', 'https://github.com/avatar2.png');
+
         $this->collection = new Collection;
+    }
+
+    public function addRemovesDuplicates()
+    {
+        $this->collection->add($this->user1);
+        $this->collection->add($this->user2);
+        $this->collection->add($this->user1);
+
+        $this->assertSame(2, $this->collection->count());
     }
 
     public function testCurrent()
     {
         $this->collection->add($this->user1);
+
         $this->assertSame($this->user1, $this->collection->current());
     }
 
@@ -40,25 +50,42 @@ class CollectionTest extends TestCase
         $this->collection->add($this->user1);
         $this->collection->add($this->user2);
         $this->collection->add($this->user3);
+
         $this->collection->next();
+
         $this->assertSame($this->user2, $this->collection->current());
     }
 
     public function testKey()
     {
         $this->collection->add($this->user1);
+
         $this->assertSame(13, $this->collection->key());
     }
 
     public function testValidWithUser()
     {
         $this->collection->add($this->user1);
-        $this->assertSame(true, $this->collection->valid());
+
+        $this->assertTrue($this->collection->valid());
     }
 
-    public function testValidWitouthUser()
+    public function testValidWithoutUser()
     {
-        $this->assertSame(false, $this->collection->valid());
+        $this->assertFalse($this->collection->valid());
+    }
+
+    public function testValidWhenFinishedIterating()
+    {
+        $this->collection->add($this->user1);
+        $this->collection->add($this->user2);
+        $this->collection->add($this->user3);
+
+        $this->collection->next();
+        $this->collection->next();
+        $this->collection->next();
+
+        $this->assertFalse($this->collection->valid());
     }
 
     public function testRewind()
@@ -66,8 +93,13 @@ class CollectionTest extends TestCase
         $this->collection->add($this->user1);
         $this->collection->add($this->user2);
         $this->collection->add($this->user3);
-        $this->collection->rewind();
+
         $this->collection->next();
+
+        $this->collection->rewind();
+
+        $this->collection->next();
+
         $this->assertSame($this->user2, $this->collection->current());
     }
 
@@ -76,31 +108,59 @@ class CollectionTest extends TestCase
         $this->collection->add($this->user1);
         $this->collection->add($this->user2);
         $this->collection->add($this->user3);
+
         $this->assertSame(3, $this->collection->count());
     }
 
     public function testContainsWithUser()
     {
         $this->collection->add($this->user1);
-        $this->assertSame(true, $this->collection->contains($this->user1));
+
+        $this->assertTrue($this->collection->contains($this->user1));
     }
 
     public function testContainsWithoutUser()
     {
-        $this->assertSame(false, $this->collection->contains($this->user1));
+        $this->assertFalse($this->collection->contains($this->user1));
     }
 
-    public function testFilter()
+    public function testContainsWithUserWithMatch()
+    {
+        $this->collection->add($this->user1);
+        $this->collection->add($this->user2);
+
+        $this->assertTrue($this->collection->contains($this->user2));
+    }
+
+    public function testFilterIsImmutable()
     {
         $this->collection->add($this->user1);
         $this->collection->add($this->user2);
         $this->collection->add($this->user3);
 
         $filteredCollection = $this->collection->filter(function(User $user) {
-            return $user->getId() === 13;
+            return $user->getId() === 14;
+        });
+
+        $this->assertNotSame($filteredCollection->key(), $this->collection);
+    }
+
+    public function testFilterFilters()
+    {
+        $this->collection->add($this->user1);
+        $this->collection->add($this->user2);
+        $this->collection->add($this->user3);
+
+        $filteredCollection = $this->collection->filter(function(User $user) {
+            return $user->getId() === 14;
         });
         
-        $this->assertSame(13, $filteredCollection->key());
+        $this->assertSame(1, $filteredCollection->count());
+
+        $this->assertFalse($filteredCollection->contains($this->user1));
+        $this->assertFalse($filteredCollection->contains($this->user3));
+
+        $this->assertTrue($filteredCollection->contains($this->user2));
     }
 
     public function testToArray()
@@ -112,9 +172,29 @@ class CollectionTest extends TestCase
                 'id'        => 13,
                 'username'  => 'TestUser1',
                 'url'       => 'https://github.com/TestUser1',
-                'avatarUrl' => 'https://github.com/avatar/png',
+                'avatarUrl' => 'https://github.com/avatar1.png',
             ]
         ], $this->collection->toArray());
     }
 
+    public function testToArrayWithMultipleUsers()
+    {
+        $this->collection->add($this->user1);
+        $this->collection->add($this->user2);
+
+        $this->assertSame([
+            13 => [
+                'id'        => 13,
+                'username'  => 'TestUser1',
+                'url'       => 'https://github.com/TestUser1',
+                'avatarUrl' => 'https://github.com/avatar1.png',
+            ],
+            14 => [
+                'id'        => 14,
+                'username'  => 'TestUser2',
+                'url'       => 'https://github.com/TestUser2',
+                'avatarUrl' => 'https://github.com/avatar2.png',
+            ],
+        ], $this->collection->toArray());
+    }
 }

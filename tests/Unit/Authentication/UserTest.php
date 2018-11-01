@@ -3,17 +3,16 @@
 namespace PeeHaa\AwesomeFeedTest\Unit\Authentication;
 
 use PeeHaa\AwesomeFeed\Authentication\User;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    /** @var MockObject|User */
+    /** @var User */
     private $user;
 
     public function setUp()
     {
-        $this->user = new User(13, 'TestUser', 'https://github.com/TestUser', 'https://github.com/avatar/png');
+        $this->user = new User(13, 'TestUser1', 'https://github.com/TestUser1', 'https://github.com/avatar1.png');
     }
 
     public function testGetId()
@@ -23,26 +22,26 @@ class UserTest extends TestCase
 
     public function testGetUsername()
     {
-        $this->assertSame('TestUser', $this->user->getUsername());
+        $this->assertSame('TestUser1', $this->user->getUsername());
     }
 
     public function testGetUrl()
     {
-        $this->assertSame('https://github.com/TestUser', $this->user->getUrl());
+        $this->assertSame('https://github.com/TestUser1', $this->user->getUrl());
     }
 
     public function testGetAvatarUrl()
     {
-        $this->assertSame('https://github.com/avatar/png', $this->user->getAvatarUrl());
+        $this->assertSame('https://github.com/avatar1.png', $this->user->getAvatarUrl());
     }
 
     public function testToArray()
     {
         $this->assertSame([
             'id'        => 13,
-            'username'  => 'TestUser',
-            'url'       => 'https://github.com/TestUser',
-            'avatarUrl' => 'https://github.com/avatar/png',
+            'username'  => 'TestUser1',
+            'url'       => 'https://github.com/TestUser1',
+            'avatarUrl' => 'https://github.com/avatar1.png',
         ], $this->user->toArray());
     }
 }

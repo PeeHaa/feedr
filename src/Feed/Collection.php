@@ -40,4 +40,33 @@ class Collection implements \Iterator, \Countable
     {
         return count($this->feeds);
     }
+
+    public function contains(Feed $feed): bool
+    {
+        return array_key_exists($feed->getId(), $this->feeds);
+    }
+
+    public function filter(callable $callback): self
+    {
+        $collection = new Collection();
+
+        foreach ($this->feeds as $feed) {
+            if ($callback($feed) === true) {
+                $collection->add($feed);
+            }
+        }
+
+        return $collection;
+    }
+
+    public function toArray(): array
+    {
+        $feeds = [];
+
+        foreach ($this->feeds as $feed) {
+            $feeds[$feed->getId()] = $feed->toArray();
+        }
+
+        return $feeds;
+    }
 }

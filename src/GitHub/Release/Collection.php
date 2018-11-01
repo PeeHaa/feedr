@@ -41,6 +41,24 @@ class Collection implements \Iterator, \Countable
         return count($this->releases);
     }
 
+    public function contains(Release $release): bool
+    {
+        return array_key_exists($release->getId(), $this->releases);
+    }
+
+    public function filter(callable $callback): self
+    {
+        $collection = new Collection();
+
+        foreach ($this->releases as $release) {
+            if ($callback($release) === true) {
+                $collection->add($release);
+            }
+        }
+
+        return $collection;
+    }
+
     public function toArray(): array
     {
         $releases = [];
