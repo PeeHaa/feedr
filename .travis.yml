@@ -12,12 +12,12 @@ matrix:
     - name: '[UNIT] PHP 7.2 With Highest Dependencies'
       php: '7.2'
       env: dependencies=highest
-    - name: '[UNIT] PHP 7.2 With Locked Dependencies'
+    - name: '[UNIT] PHP 7.3 With Locked Dependencies'
       php: '7.3'
-    - name: '[UNIT] PHP 7.2 With Lowest Dependencies'
+    - name: '[UNIT] PHP 7.3 With Lowest Dependencies'
       php: '7.3'
       env: dependencies=lowest
-    - name: '[UNIT] PHP 7.2 With Highest Dependencies'
+    - name: '[UNIT] PHP 7.3 With Highest Dependencies'
       php: '7.3'
       env: dependencies=highest
     - name: '[UNIT] PHP Nightly With Locked Dependencies'
