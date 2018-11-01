@@ -55,4 +55,4 @@ test_script:
     - phpdbg -qrr vendor/phpunit/phpunit/phpunit --coverage-text
 
 after_success:
-- travis_retry php php-coveralls.phar
+    - travis_retry php php-coveralls.phar
