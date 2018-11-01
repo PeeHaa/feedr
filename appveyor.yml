@@ -53,6 +53,3 @@ install:
 test_script:
     - cd c:\projects\php-project-workspace
     - phpdbg -qrr vendor/phpunit/phpunit/phpunit --coverage-text
-
-after_success:
-    - travis_retry php php-coveralls.phar

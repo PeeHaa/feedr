@@ -44,3 +44,6 @@ before_script:
 
 script:
   - phpdbg -qrr vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+
+after_success:
+  - travis_retry php php-coveralls.phar
