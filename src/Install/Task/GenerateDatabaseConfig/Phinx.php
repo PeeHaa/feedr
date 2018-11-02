@@ -12,6 +12,8 @@ class Phinx
 
         if (file_exists($phinxConfigFile)) {
             $output->success('Phinx configuration already exists at: ' . realpath($phinxConfigFile));
+
+            return;
         }
 
         $searchAndReplace = [
