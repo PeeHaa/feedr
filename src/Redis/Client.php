@@ -49,11 +49,6 @@ class Client
         return $this->client->query('LPOP', $this->buildKey('repository'));
     }
 
-    public function __call($name, $arguments): Promise
-    {
-        return $this->client->$name(...$arguments);
-    }
-
     private function buildKey(string $name): string
     {
         return self::PREFIX . $name;

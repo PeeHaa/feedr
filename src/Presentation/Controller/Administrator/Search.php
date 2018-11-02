@@ -65,7 +65,7 @@ class Search
 
         $users = $gitHubStorage
             ->search($form['query']->getValue())
-            ->filter(function(User $user) use ($feed, $gateKeeper) {
+            ->filter(function(User $user) use ($feed) {
                 return !$feed->hasUserAccess($user);
             })
         ;

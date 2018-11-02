@@ -65,7 +65,7 @@ class Search
 
         $repositories = $gitHubStorage
             ->search($searchForm['query']->getValue())
-            ->filter(function(Repository $repository) use ($feed, $gateKeeper) {
+            ->filter(function(Repository $repository) use ($feed) {
                 return !$feed->isRepositoryAdded($repository);
             })
         ;

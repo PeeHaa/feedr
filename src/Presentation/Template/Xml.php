@@ -67,29 +67,6 @@ class Xml
         return $output;
     }
 
-    public function renderPage(string $template, array $data = []): string
-    {
-        $this->_variables = $data;
-
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $content = $this->render($template, $data);
-
-        try {
-            ob_start();
-
-            (function() use ($content) {
-                extract($this->_variables);
-
-                /** @noinspection PhpIncludeInspection */
-                require $this->templatePath . $this->basePage;
-            })();
-        } finally {
-            $output = ob_get_clean();
-        }
-
-        return $output;
-    }
-
     private function translate(string $key, array $data = []): string
     {
         return $this->translator->translate($key, $data);

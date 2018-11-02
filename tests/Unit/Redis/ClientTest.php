@@ -175,23 +175,4 @@ class ClientTest extends TestCase
             $client->popTask();
         });
     }
-
-    public function testMagicCall()
-    {
-        /** @var MockObject|AmpClient $redisClient */
-        $redisClient = $this->createMock(AmpClient::class);
-
-        $redisClient
-            ->expects($this->once())
-            ->method('dump')
-            ->willReturn(new Success())
-            ->with('baz')
-        ;
-
-        $client = new Client($redisClient);
-
-        Loop::run(function() use ($client) {
-            $client->dump('baz');
-        });
-    }
 }
