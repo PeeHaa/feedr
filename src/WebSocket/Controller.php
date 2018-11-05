@@ -14,7 +14,7 @@ use function Amp\call;
 
 class Controller implements Application
 {
-    /** @var null|Endpoint */
+    /** @var Endpoint|null */
     private $endpoint;
 
     /** @var Channels */
@@ -26,11 +26,13 @@ class Controller implements Application
         $this->channels = new Channels();
     }
 
+    // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
     public function onHandshake(Request $request, Response $response): Response
     {
         return $response;
     }
 
+    // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
     public function onOpen(int $clientId, Request $request): void
     {
         // nothing here
@@ -61,6 +63,7 @@ class Controller implements Application
         });
     }
 
+    // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
     public function onClose(int $clientId, int $code, string $reason): void
     {
         $this->channels->unsubscribeClient($clientId);

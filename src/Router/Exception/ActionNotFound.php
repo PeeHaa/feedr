@@ -2,4 +2,6 @@
 
 namespace PeeHaa\AwesomeFeed\Router\Exception;
 
-class ActionNotFound extends \Exception{}
+class ActionNotFound extends \Exception
+{
+}

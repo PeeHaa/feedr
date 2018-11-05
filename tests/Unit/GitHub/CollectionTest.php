@@ -161,7 +161,7 @@ class CollectionTest extends TestCase
         $this->collection->add($this->repository2);
         $this->collection->add($this->repository3);
 
-        $filteredCollection = $this->collection->filter(function(Repository $repository) {
+        $filteredCollection = $this->collection->filter(static function(Repository $repository) {
             return $repository->getId() === 22;
         });
 
@@ -174,7 +174,7 @@ class CollectionTest extends TestCase
         $this->collection->add($this->repository2);
         $this->collection->add($this->repository3);
 
-        $filteredCollection = $this->collection->filter(function(Repository $repository) {
+        $filteredCollection = $this->collection->filter(static function(Repository $repository) {
             return $repository->getId() === 22;
         });
 

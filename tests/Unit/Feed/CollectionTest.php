@@ -44,7 +44,7 @@ class CollectionTest extends TestCase
             'test-feed-2',
             $createdBy,
             new UserCollection(),
-            new RepositoryCollection,
+            new RepositoryCollection(),
             new ReleaseCollection()
         );
 
@@ -54,11 +54,11 @@ class CollectionTest extends TestCase
             'test-feed-3',
             $createdBy,
             new UserCollection(),
-            new RepositoryCollection,
+            new RepositoryCollection(),
             new ReleaseCollection()
         );
 
-        $this->collection = new Collection;
+        $this->collection = new Collection();
     }
 
     public function addRemovesDuplicates()
@@ -150,7 +150,7 @@ class CollectionTest extends TestCase
         $this->collection->add($this->feed2);
         $this->collection->add($this->feed3);
 
-        $filteredCollection = $this->collection->filter(function(Feed $feed) {
+        $filteredCollection = $this->collection->filter(static function(Feed $feed) {
             return $feed->getId() === 14;
         });
 
@@ -163,7 +163,7 @@ class CollectionTest extends TestCase
         $this->collection->add($this->feed2);
         $this->collection->add($this->feed3);
 
-        $filteredCollection = $this->collection->filter(function(Feed $feed) {
+        $filteredCollection = $this->collection->filter(static function(Feed $feed) {
             return $feed->getId() === 14;
         });
         

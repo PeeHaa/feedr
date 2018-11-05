@@ -29,7 +29,9 @@ class FormTest extends TestCase
                 parent::__construct($csrfToken);
             }
 
-            protected function setupFields() {}
+            protected function setupFields()
+            {
+            }
         };
 
         $this->assertFalse($form->toArray()['validated']);
@@ -44,7 +46,9 @@ class FormTest extends TestCase
                 parent::__construct($csrfToken);
             }
 
-            protected function setupFields() {}
+            protected function setupFields()
+            {
+            }
         };
 
         $form->validate();
@@ -61,7 +65,9 @@ class FormTest extends TestCase
                 parent::__construct($csrfToken);
             }
 
-            protected function setupFields() {}
+            protected function setupFields()
+            {
+            }
         };
 
         $form->validate();
@@ -78,7 +84,8 @@ class FormTest extends TestCase
                 parent::__construct($csrfToken);
             }
 
-            protected function setupFields() {
+            protected function setupFields()
+            {
                 $this->addField(new TextField('test', [
                     new RequiredValidator(),
                 ]));
@@ -99,7 +106,8 @@ class FormTest extends TestCase
                 parent::__construct($csrfToken);
             }
 
-            protected function setupFields() {
+            protected function setupFields()
+            {
                 $this->addField(new TextField('test', [
                     new RequiredValidator(),
                 ]));
@@ -141,7 +149,8 @@ class FormTest extends TestCase
                 parent::__construct($csrfToken);
             }
 
-            protected function setupFields() {
+            protected function setupFields()
+            {
                 $this->addField(new TextField('test', [
                     new RequiredValidator(),
                 ]));

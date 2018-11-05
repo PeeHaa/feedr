@@ -33,8 +33,7 @@ class Queue
         RepositoryApi $apiClient,
         Controller $controller,
         int $frequencyInSeconds = 7
-    )
-    {
+    ) {
         $this->redisClient       = $redisClient;
         $this->repositoryStorage = $repositoryStorage;
         $this->releaseStorage    = $releaseStorage;

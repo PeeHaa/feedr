@@ -2,8 +2,8 @@
 
 namespace PeeHaa\AwesomeFeedTest\Unit\Authentication;
 
-use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\Authentication\Collection;
+use PeeHaa\AwesomeFeed\Authentication\User;
 use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
@@ -26,7 +26,7 @@ class CollectionTest extends TestCase
         $this->user2 = new User(14, 'TestUser2', 'https://github.com/TestUser2', 'https://github.com/avatar2.png');
         $this->user3 = new User(15, 'TestUser3', 'https://github.com/TestUser3', 'https://github.com/avatar2.png');
 
-        $this->collection = new Collection;
+        $this->collection = new Collection();
     }
 
     public function addRemovesDuplicates()
@@ -138,7 +138,7 @@ class CollectionTest extends TestCase
         $this->collection->add($this->user2);
         $this->collection->add($this->user3);
 
-        $filteredCollection = $this->collection->filter(function(User $user) {
+        $filteredCollection = $this->collection->filter(static function(User $user) {
             return $user->getId() === 14;
         });
 
@@ -151,7 +151,7 @@ class CollectionTest extends TestCase
         $this->collection->add($this->user2);
         $this->collection->add($this->user3);
 
-        $filteredCollection = $this->collection->filter(function(User $user) {
+        $filteredCollection = $this->collection->filter(static function(User $user) {
             return $user->getId() === 14;
         });
         
@@ -173,7 +173,7 @@ class CollectionTest extends TestCase
                 'username'  => 'TestUser1',
                 'url'       => 'https://github.com/TestUser1',
                 'avatarUrl' => 'https://github.com/avatar1.png',
-            ]
+            ],
         ], $this->collection->toArray());
     }
 

@@ -32,8 +32,7 @@ class Feed
         AdministratorCollection $administrators,
         RepositoryCollection $repositories,
         ReleaseCollection $releases
-    )
-    {
+    ) {
         $this->id             = $id;
         $this->name           = $name;
         $this->slug           = $slug;

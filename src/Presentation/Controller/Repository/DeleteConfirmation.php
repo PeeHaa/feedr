@@ -26,7 +26,6 @@ class DeleteConfirmation
         RepositoryStorage $repositoryStorage,
         GateKeeper $gateKeeper,
         string $feedId,
-        string $feedSlug,
         string $repositoryId
     ): Response {
         $feed = $feedStorage->getById((int) $feedId);

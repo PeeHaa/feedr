@@ -2,4 +2,6 @@
 
 namespace PeeHaa\AwesomeFeed\Router\Exception;
 
-class UndefinedUrl extends \Exception{}
+class UndefinedUrl extends \Exception
+{
+}

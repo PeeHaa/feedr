@@ -6,7 +6,6 @@ use Amp\Artax\Client;
 use Amp\Artax\Request;
 use Amp\Artax\Response;
 use Amp\Promise;
-use Amp\Success;
 use PeeHaa\AwesomeFeed\Authentication\User as UserEntity;
 use PeeHaa\AwesomeFeed\GitHub\AccessToken;
 use PeeHaa\AwesomeFeed\GitHub\ApiRequestInformation;

@@ -4,6 +4,26 @@ language: php
 
 matrix:
   include:
+    - name: '[PHPSTAN] PHP 7.2'
+      php: '7.2'
+      env: phpstan=1
+    - name: '[PHPSTAN] PHP 7.3'
+      php: '7.2'
+      env: phpstan=1
+    - name: '[PHPSTAN] PHP nightly'
+      php: '7.2'
+      env: phpstan=1
+
+    - name: '[CS] PHP 7.2'
+      php: '7.2'
+      env: cs=1
+    - name: '[CS] PHP 7.3'
+      php: '7.3'
+      env: cs=1
+    - name: '[CS] PHP Nightly'
+      php: nightly
+      env: cs=1
+
     - name: '[UNIT] PHP 7.2 With Locked Dependencies'
       php: '7.2'
     - name: '[UNIT] PHP 7.2 With Lowest Dependencies'
@@ -28,6 +48,29 @@ matrix:
     - name: '[UNIT] PHP Nightly With Lowest Dependencies'
       php: nightly
       env: dependencies=highest
+  allow_failures:
+    - name: '[PHPSTAN] PHP 7.2 With Locked Dependencies'
+      php: '7.2'
+      env: phpstan=1
+    - name: '[PHPSTAN] PHP 7.2 With Locked Dependencies'
+      php: '7.3'
+      env: phpstan=1
+    - name: '[PHPSTAN] PHP 7.2 With Locked Dependencies'
+      php: nightly
+      env: phpstan=1
+
+    - name: '[CS] PHP Nightly'
+      php: nightly
+      env: cs=1
+
+    - name: '[UNIT] PHP Nightly With Locked Dependencies'
+      php: nightly
+    - name: '[UNIT] PHP Nightly With Highest Dependencies'
+      php: nightly
+      env: dependencies=lowest
+    - name: '[UNIT] PHP Nightly With Lowest Dependencies'
+      php: nightly
+      env: dependencies=highest
 
 before_install:
 - phpenv config-rm xdebug.ini || echo "No xdebug config."
@@ -43,7 +86,9 @@ before_script:
   - if [ "$dependencies" = "highest" ]; then travis_retry composer update --no-scripts -n; fi;
 
 script:
-  - phpdbg -qrr vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+  - if [ -z "$phpstan" ] && [ -z "$cs" ]; then phpdbg -qrr vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml; fi;
+  - if [ "$phpstan" = 1 ]; then vendor/bin/phpstan analyse -l 5 src; fi;
+  - if [ "cs" = 1 ]; then vendor/bin/phpcs -s; fi;
 
 after_success:
-  - travis_retry php php-coveralls.phar
+  - if [ -z "$phpstan" ] && [ -z "$cs" ]; then travis_retry php php-coveralls.phar; fi;

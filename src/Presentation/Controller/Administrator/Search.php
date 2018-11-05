@@ -30,8 +30,7 @@ class Search
         CreateForm $createForm,
         GateKeeper $gateKeeper,
         Storage $gitHubStorage,
-        string $id,
-        string $slug
+        string $id
     ): Response {
         $feed = $storage->getById((int) $id);
 
@@ -65,7 +64,7 @@ class Search
 
         $users = $gitHubStorage
             ->search($form['query']->getValue())
-            ->filter(function(User $user) use ($feed) {
+            ->filter(static function(User $user) use ($feed) {
                 return !$feed->hasUserAccess($user);
             })
         ;

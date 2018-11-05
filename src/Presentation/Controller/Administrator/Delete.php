@@ -26,7 +26,6 @@ class Delete
         UserStorage $userStorage,
         GateKeeper $gateKeeper,
         string $feedId,
-        string $feedSlug,
         string $userId
     ): Response {
         $form->bindRequest($request);
@@ -47,7 +46,7 @@ class Delete
 
         $this->response->setContent(json_encode([
             'id'         => $user->getId(),
-            'selfDelete' => $user === $gateKeeper->getUser()->getId(),
+            'selfDelete' => $user->getId() === $gateKeeper->getUser()->getId(),
         ]));
 
         return $this->response;

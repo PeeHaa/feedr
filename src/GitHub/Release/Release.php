@@ -25,8 +25,7 @@ class Release
         string $url,
         Repository $repository,
         \DateTimeImmutable $publishedDate
-    )
-    {
+    ) {
         $this->id            = $id;
         $this->name          = $name;
         $this->body          = $body;

@@ -23,8 +23,7 @@ class DeleteConfirmation
         Delete $form,
         Feed $storage,
         GateKeeper $gateKeeper,
-        string $id,
-        string $slug
+        string $id
     ): Response {
         $feed = $storage->getById((int) $id);
 

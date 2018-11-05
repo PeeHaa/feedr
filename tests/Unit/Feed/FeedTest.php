@@ -162,7 +162,7 @@ class FeedTest extends TestCase
                         'url'       => 'https://github.com/TestUser1',
                         'avatarUrl' => 'https://github.com/avatar1.png',
                     ],
-                ]
+                ],
             ],
             'releases' => [
                 19 => [

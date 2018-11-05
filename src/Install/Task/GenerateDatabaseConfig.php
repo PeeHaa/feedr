@@ -38,7 +38,7 @@ class GenerateDatabaseConfig implements Task
                 $configuration['database']['host'] = $this->cliPrompt->ask(
                     'What is the database host: '
                 );
-            } while(!$configuration['database']['host']);
+            } while (!$configuration['database']['host']);
         }
 
         if (!array_key_exists('name', $configuration['database'])) {
@@ -46,7 +46,7 @@ class GenerateDatabaseConfig implements Task
                 $configuration['database']['name'] = $this->cliPrompt->ask(
                     'What is the database name (make sure the database is created): '
                 );
-            } while(!$configuration['database']['name']);
+            } while (!$configuration['database']['name']);
         }
 
         if (!array_key_exists('username', $configuration['database'])) {
@@ -54,7 +54,7 @@ class GenerateDatabaseConfig implements Task
                 $configuration['database']['username'] = $this->cliPrompt->ask(
                     'What is the database username: '
                 );
-            } while(!$configuration['database']['username']);
+            } while (!$configuration['database']['username']);
         }
 
         if (!array_key_exists('password', $configuration['database'])) {
@@ -62,7 +62,7 @@ class GenerateDatabaseConfig implements Task
                 $configuration['database']['password'] = $this->cliPrompt->askAndHideAnswer(
                     'What is the database password: '
                 );
-            } while(!$configuration['database']['password']);
+            } while (!$configuration['database']['password']);
         }
 
         $output->info('Writing configuration file');

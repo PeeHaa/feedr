@@ -26,7 +26,6 @@ class DeleteConfirmation
         UserStorage $userStorage,
         GateKeeper $gateKeeper,
         string $feedId,
-        string $feedSlug,
         string $userId
     ): Response {
         $feed = $feedStorage->getById((int) $feedId);
@@ -41,7 +40,7 @@ class DeleteConfirmation
             'deleteForm' => $form,
             'feed'       => $feed,
             'user'       => $user,
-            'selfDelete' => $user === $gateKeeper->getUser()->getId(),
+            'selfDelete' => $user->getId() === $gateKeeper->getUser()->getId(),
         ]));
 
         return $this->response;

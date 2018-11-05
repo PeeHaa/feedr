@@ -20,7 +20,7 @@ class GitHub
                 $configuration['gitHub']['clientId'] = $cliPrompt->ask(
                     'What is the GitHub client id (https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/): '
                 );
-            } while(!$configuration['gitHub']['clientId']);
+            } while (!$configuration['gitHub']['clientId']);
         }
 
         if (!array_key_exists('clientSecret', $configuration['gitHub'])) {
@@ -28,7 +28,7 @@ class GitHub
                 $configuration['gitHub']['clientSecret'] = $cliPrompt->askAndHideAnswer(
                     'What is the GitHub client secret (https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/): '
                 );
-            } while(!$configuration['gitHub']['clientSecret']);
+            } while (!$configuration['gitHub']['clientSecret']);
         }
 
         if (!array_key_exists('accessToken', $configuration['gitHub'])) {
@@ -36,7 +36,7 @@ class GitHub
                 $configuration['gitHub']['accessToken'] = $cliPrompt->askAndHideAnswer(
                     'What is your personal GitHub access token (https://github.com/settings/tokens): '
                 );
-            } while(!$configuration['gitHub']['accessToken']);
+            } while (!$configuration['gitHub']['accessToken']);
         }
 
         $output->success('GitHub configuration generated');

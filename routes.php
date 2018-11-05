@@ -43,15 +43,15 @@ if ($gateKeeper->isAuthorized()) {
     $router->get('home', '/', [Dashboard::class, 'render']);
     $router->post('createFeed', '/feeds/create', [CreateFeed::class, 'process']);
     $router->get('editFeed', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/edit', [EditFeed::class, 'render']);
-    $router->get('deleteFeedConfirmation', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/delete', [DeleteFeedConfirmation::class, 'render']);
+    $router->get('deleteFeedConfirmation', '/feeds/{id:\d+}/{_slug:[a-z0-9\-\._]+}/delete', [DeleteFeedConfirmation::class, 'render']);
     $router->post('deleteFeed', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/delete', [DeleteFeed::class, 'process']);
-    $router->post('searchUsers', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/administrators/search', [SearchUser::class, 'render']);
+    $router->post('searchUsers', '/feeds/{id:\d+}/{_slug:[a-z0-9\-\._]+}/administrators/search', [SearchUser::class, 'render']);
     $router->post('addAdministrators', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/administrators/create', [CreateAdministrators::class, 'process']);
-    $router->get('deleteAdministratorConfirmation', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/administrators/{userId:\d+}/delete', [DeleteAdministratorConfirmation::class, 'render']);
-    $router->post('deleteAdministrator', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/administrators/{userId:\d+}/delete', [DeleteAdministrator::class, 'process']);
-    $router->post('searchRepositories', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/repositories/search', [SearchRepository::class, 'render']);
+    $router->get('deleteAdministratorConfirmation', '/feeds/{id:\d+}/{_slug:[a-z0-9\-\._]+}/administrators/{userId:\d+}/delete', [DeleteAdministratorConfirmation::class, 'render']);
+    $router->post('deleteAdministrator', '/feeds/{id:\d+}/{_slug:[a-z0-9\-\._]+}/administrators/{userId:\d+}/delete', [DeleteAdministrator::class, 'process']);
+    $router->post('searchRepositories', '/feeds/{id:\d+}/{_slug:[a-z0-9\-\._]+}/repositories/search', [SearchRepository::class, 'render']);
     $router->post('addRepositories', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/repositories/create', [CreateRepository::class, 'process']);
-    $router->get('deleteRepositoryConfirmation', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/repositories/{repositoryId:\d+}/delete', [DeleteRepositoryConfirmation::class, 'render']);
-    $router->post('deleteRepository', '/feeds/{id:\d+}/{slug:[a-z0-9\-\._]+}/repositories/{repositoryId:\d+}/delete', [DeleteRepository::class, 'process']);
+    $router->get('deleteRepositoryConfirmation', '/feeds/{id:\d+}/{_slug:[a-z0-9\-\._]+}/repositories/{repositoryId:\d+}/delete', [DeleteRepositoryConfirmation::class, 'render']);
+    $router->post('deleteRepository', '/feeds/{id:\d+}/{_slug:[a-z0-9\-\._]+}/repositories/{repositoryId:\d+}/delete', [DeleteRepository::class, 'process']);
     $router->post('logout', '/logout', [LogOut::class, 'process']);
 }

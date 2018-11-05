@@ -2,8 +2,8 @@
 
 namespace PeeHaa\AwesomeFeed\Presentation\Template;
 
-use CodeCollab\I18n\Translator;
 use CodeCollab\CsrfToken\Token;
+use CodeCollab\I18n\Translator;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Router\UrlBuilder;
 use PeeHaa\AwesomeFeed\WebSocket\Configuration;
@@ -16,12 +16,15 @@ class Html
 
     private $translator;
 
+    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.WriteOnlyProperty
     private $csrfToken;
 
     private $urlBuilder;
 
+    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.WriteOnlyProperty
     private $gateKeeper;
 
+    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.WriteOnlyProperty
     private $webSocketConfiguration;
 
     private $_variables;
@@ -34,8 +37,7 @@ class Html
         UrlBuilder $urlBuilder,
         GateKeeper $gateKeeper,
         Configuration $webSocketConfiguration
-    )
-    {
+    ) {
         $this->basePage               = $basePage;
         $this->templatePath           = $templatePath;
         $this->translator             = $translator;
@@ -49,7 +51,7 @@ class Html
     {
         $backupVariables = $this->_variables;
 
-        if (!empty($data)) {
+        if (count($data) > 0) {
             $this->_variables = $data;
         }
 
@@ -81,6 +83,7 @@ class Html
         try {
             ob_start();
 
+            // phpcs:ignore SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure.UnusedInheritedVariable
             (function() use ($content) {
                 extract($this->_variables);
 
@@ -94,11 +97,13 @@ class Html
         return $output;
     }
 
+    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
     private function translate(string $key, array $data = []): string
     {
         return $this->translator->translate($key, $data);
     }
 
+    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
     private function escape(string $data): string
     {
         if (strpos($data, 'javascript:') === 0) {
@@ -108,6 +113,7 @@ class Html
         return htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
+    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
     private function url(string $name, ...$variables): string
     {
         return $this->urlBuilder->build($name, ...$variables);

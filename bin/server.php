@@ -13,8 +13,8 @@ use PeeHaa\AwesomeFeed\Queue\Queue;
 use PeeHaa\AwesomeFeed\WebSocket\Configuration;
 use PeeHaa\AwesomeFeed\WebSocket\Controller;
 use Psr\Log\NullLogger;
-use function Amp\Socket\listen;
 use function Amp\asyncCall;
+use function Amp\Socket\listen;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -39,12 +39,12 @@ $router->addRoute('GET', '/live-releases', $auryn->make(Websocket::class));
 $server = new Server($servers, $router, new NullLogger());
 $queue  = $auryn->make(Queue::class);
 
-Loop::run(function () use ($server, $queue) {
-    asyncCall(function() use ($server) {
+Loop::run(static function () use ($server, $queue) {
+    asyncCall(static function() use ($server) {
         yield $server->start();
     });
 
-    asyncCall(function() use ($queue) {
+    asyncCall(static function() use ($queue) {
         $queue->start();
     });
 });

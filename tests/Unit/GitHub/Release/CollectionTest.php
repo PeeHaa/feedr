@@ -61,7 +61,7 @@ class CollectionTest extends TestCase
             new \DateTimeImmutable('@946684800')
         );
 
-        $this->collection = new Collection;
+        $this->collection = new Collection();
     }
 
     public function addRemovesDuplicates()
@@ -173,7 +173,7 @@ class CollectionTest extends TestCase
         $this->collection->add($this->release2);
         $this->collection->add($this->release3);
 
-        $filteredCollection = $this->collection->filter(function(Release $release) {
+        $filteredCollection = $this->collection->filter(static function(Release $release) {
             return $release->getId() === 21;
         });
 
@@ -186,7 +186,7 @@ class CollectionTest extends TestCase
         $this->collection->add($this->release2);
         $this->collection->add($this->release3);
 
-        $filteredCollection = $this->collection->filter(function(Release $release) {
+        $filteredCollection = $this->collection->filter(static function(Release $release) {
             return $release->getId() === 21;
         });
         

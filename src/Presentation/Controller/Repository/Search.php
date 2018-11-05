@@ -30,8 +30,7 @@ class Search
         CreateForm $createForm,
         GateKeeper $gateKeeper,
         Storage $gitHubStorage,
-        string $id,
-        string $slug
+        string $id
     ): Response {
         $feed = $storage->getById((int) $id);
 
@@ -65,7 +64,7 @@ class Search
 
         $repositories = $gitHubStorage
             ->search($searchForm['query']->getValue())
-            ->filter(function(Repository $repository) use ($feed) {
+            ->filter(static function(Repository $repository) use ($feed) {
                 return !$feed->isRepositoryAdded($repository);
             })
         ;

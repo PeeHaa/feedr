@@ -9,8 +9,8 @@ use PeeHaa\AwesomeFeed\Feed\Collection;
 use PeeHaa\AwesomeFeed\Feed\Feed as Entity;
 use PeeHaa\AwesomeFeed\Form\Feed\Create;
 use PeeHaa\AwesomeFeed\GitHub\Collection as RepositoryCollection;
-use PeeHaa\AwesomeFeed\GitHub\Release\Release;
 use PeeHaa\AwesomeFeed\GitHub\Release\Collection as ReleaseCollection;
+use PeeHaa\AwesomeFeed\GitHub\Release\Release;
 use PeeHaa\AwesomeFeed\GitHub\Repository;
 
 class Feed
@@ -247,7 +247,7 @@ class Feed
                 $repositories[$feedRecord['feed_id']] = new RepositoryCollection();
             }
 
-            if ($feedRecord['repository_id'] == null) {
+            if ($feedRecord['repository_id'] === null) {
                 continue;
             }
 

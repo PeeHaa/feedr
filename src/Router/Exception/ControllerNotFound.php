@@ -2,4 +2,6 @@
 
 namespace PeeHaa\AwesomeFeed\Router\Exception;
 
-class ControllerNotFound extends \Exception{}
+class ControllerNotFound extends \Exception
+{
+}

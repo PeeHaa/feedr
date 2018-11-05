@@ -26,7 +26,6 @@ class Delete
         RepositoryStorage $repositoryStorage,
         GateKeeper $gateKeeper,
         string $feedId,
-        string $feedSlug,
         string $repositoryId
     ): Response {
         $form->bindRequest($request);

@@ -2,8 +2,8 @@
 
 namespace PeeHaa\AwesomeFeedTest\Unit\Authentication;
 
-use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
+use PeeHaa\AwesomeFeed\Authentication\User;
 use PHPUnit\Framework\TestCase;
 
 class GateKeeperTest extends TestCase
@@ -22,7 +22,7 @@ class GateKeeperTest extends TestCase
         $this->user1 = new User(13, 'TestUser1', 'https://github.com/TestUser1', 'https://github.com/avatar1.png');
         $this->user2 = new User(14, 'TestUser2', 'https://github.com/TestUser2', 'https://github.com/avatar2.png');
 
-        $this->gateKeeper = new GateKeeper;
+        $this->gateKeeper = new GateKeeper();
     }
 
     public function testUnauthorizedGuest()

@@ -3,7 +3,6 @@
 namespace PeeHaa\AwesomeFeedTest\Unit\Redis;
 
 use Amp\Loop;
-use Amp\Promise;
 use Amp\Redis\Client as AmpClient;
 use Amp\Success;
 use PeeHaa\AwesomeFeed\Authentication\User;
@@ -77,7 +76,7 @@ class ClientTest extends TestCase
 
         $client = new Client($redisClient);
 
-        Loop::run(function() use ($client) {
+        Loop::run(static function() use ($client) {
             $client->flush();
         });
     }
@@ -93,11 +92,12 @@ class ClientTest extends TestCase
             ->expects($this->once())
             ->method('query')
             ->willReturnCallback(function($command, $key, $data) {
+                $this->assertSame('RPUSH', $command);
+                $this->assertSame('FEEDR_repository', $key);
                 $this->assertSame(json_encode($this->repositoryArray), $data);
 
                 return new Success();
             })
-            ->with('RPUSH', 'FEEDR_repository')
         ;
 
         $client = new Client($redisClient);
@@ -118,11 +118,12 @@ class ClientTest extends TestCase
             ->expects($this->once())
             ->method('query')
             ->willReturnCallback(function($command, $key, $data) {
+                $this->assertSame('LPUSH', $command);
+                $this->assertSame('FEEDR_repository', $key);
                 $this->assertSame(json_encode($this->repositoryArray), $data);
 
                 return new Success();
             })
-            ->with('LPUSH', 'FEEDR_repository')
         ;
 
         $client = new Client($redisClient);
@@ -143,11 +144,12 @@ class ClientTest extends TestCase
             ->expects($this->once())
             ->method('query')
             ->willReturnCallback(function($command, $key, $data) {
+                $this->assertSame('LPUSH', $command);
+                $this->assertSame('FEEDR_repository', $key);
                 $this->assertSame(json_encode($this->repositoryArray), $data);
 
                 return new Success();
             })
-            ->with('LPUSH', 'FEEDR_repository')
         ;
 
         $client = new Client($redisClient);
@@ -171,7 +173,7 @@ class ClientTest extends TestCase
 
         $client = new Client($redisClient);
 
-        Loop::run(function() use ($client) {
+        Loop::run(static function() use ($client) {
             $client->popTask();
         });
     }

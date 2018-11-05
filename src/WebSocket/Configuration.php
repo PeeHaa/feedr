@@ -36,7 +36,7 @@ class Configuration
     {
         return json_encode([
             'internalHostname'      => $this->internalHostname,
-            'internalPort'          => $this->getInternalPort(),
+            'internalPort'          => $this->internalPort,
             'exposeInternalAddress' => $this->expose,
         ]);
     }

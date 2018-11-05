@@ -102,10 +102,7 @@ class AuthorizationTest extends TestCase
 
         $stream
             ->method('read')
-            ->willReturnOnConsecutiveCalls(new Success(
-                json_encode($result)),
-                new Success(null)
-            )
+            ->willReturnOnConsecutiveCalls(new Success(json_encode($result)), new Success(null))
         ;
 
         $message = new Message($stream);
@@ -143,10 +140,7 @@ class AuthorizationTest extends TestCase
 
         $stream
             ->method('read')
-            ->willReturnOnConsecutiveCalls(new Success(
-                json_encode($result)),
-                new Success(null)
-            )
+            ->willReturnOnConsecutiveCalls(new Success(json_encode($result)), new Success(null))
         ;
 
         $message = new Message($stream);

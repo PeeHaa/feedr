@@ -4,7 +4,7 @@ namespace PeeHaa\AwesomeFeed\Authentication;
 
 class GateKeeper
 {
-    /** @var null|User */
+    /** @var User|null */
     private $user;
 
     public function isAuthorized(): bool
