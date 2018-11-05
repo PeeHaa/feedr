@@ -49,14 +49,14 @@ matrix:
       php: nightly
       env: dependencies=highest
   allow_failures:
-    - name: '[PHPSTAN] PHP 7.2 With Locked Dependencies'
+    - name: '[PHPSTAN] PHP 7.2'
       php: '7.2'
       env: phpstan=1
-    - name: '[PHPSTAN] PHP 7.2 With Locked Dependencies'
-      php: '7.3'
+    - name: '[PHPSTAN] PHP 7.3'
+      php: '7.2'
       env: phpstan=1
-    - name: '[PHPSTAN] PHP 7.2 With Locked Dependencies'
-      php: nightly
+    - name: '[PHPSTAN] PHP nightly'
+      php: '7.2'
       env: phpstan=1
 
     - name: '[CS] PHP Nightly'
