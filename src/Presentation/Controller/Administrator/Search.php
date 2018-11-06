@@ -9,6 +9,7 @@ use PeeHaa\AwesomeFeed\Authentication\GateKeeper;
 use PeeHaa\AwesomeFeed\Authentication\User;
 use PeeHaa\AwesomeFeed\Form\Administrator\Create as CreateForm;
 use PeeHaa\AwesomeFeed\Form\Administrator\Search as Form;
+use PeeHaa\AwesomeFeed\Presentation\Controller\Error;
 use PeeHaa\AwesomeFeed\Presentation\Template\Html;
 use PeeHaa\AwesomeFeed\Storage\GitHub\User as Storage;
 use PeeHaa\AwesomeFeed\Storage\Postgres\Feed;
@@ -32,34 +33,17 @@ class Search
         Storage $gitHubStorage,
         string $id
     ): Response {
-        $feed = $storage->getById((int) $id);
-
-        if ($feed === null || !$feed->hasUserAccess($gateKeeper->getUser())) {
-            $this->response->setContent(json_encode([
-                'error' => [
-                    'message' => 'Feed not found',
-                ],
-            ]));
-
-            $this->response->setStatusCode(StatusCode::NOT_FOUND);
-
-            return $this->response;
-        }
-
         $form->bindRequest($request);
         $form->validate();
 
         if (!$form->isValid()) {
-            $this->response->setContent(json_encode([
-                'error' => [
-                    'message' => 'Form is invalid',
-                    'form'    => $form->toArray(),
-                ],
-            ]));
-
-            $this->response->setStatusCode(StatusCode::NOT_FOUND);
-
             return $this->response;
+        }
+
+        $feed = $storage->getById((int) $id);
+
+        if ($feed === null || !$feed->hasUserAccess($gateKeeper->getUser())) {
+            return (new Error($this->response))->notFound();
         }
 
         $users = $gitHubStorage
